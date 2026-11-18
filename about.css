@@ -14,7 +14,7 @@ body.page-about .about-main { display: grid; flex: none; position: relative; gri
 .page-about .about-details ul { font-size: .9375vw; font-weight: 600; line-height: 1.666667; margin: 0; }
 .page-about .about-capabilities li,
 .page-about .about-details li { margin: 0; line-height: inherit; }
-.page-about .about-main .about-intro img { position: absolute; z-index: 1; left: 61.927083vw; top: -6.71875vw; width: 39.0625vw; height: 49.270833vw; max-height: none; transform: none; object-fit: fill; object-position: bottom; }
+.page-about .about-main .about-intro img { position: absolute; z-index: 1; left: 61.927083vw; top: -6.71875vw; width: 39.0625vw; height: max(49.270833vw, calc(100svh - 4.0625vw)); max-height: none; transform: none; object-fit: fill; object-position: bottom; }
 .page-about .about-main .about-statement { display: contents; }
 .page-about .about-main .about-statement .eyebrow { grid-column: 1; grid-row: 2; padding-left: 11.302083vw; text-align: left; margin: 0; color: #ff4000; font: 700 1.770833vw/1.2 var(--font-body); }
 .page-about .about-main .about-statement h2 { grid-column: 1; grid-row: 3; width: 37.5vw; margin: 0; color: #ff4000; font: 700 1.979167vw/1.21 var(--font-body); letter-spacing: 0; text-transform: uppercase; }
