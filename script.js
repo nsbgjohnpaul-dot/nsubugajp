@@ -189,3 +189,37 @@ if (ideaBoard) {
   preview.addEventListener('error', () => { status.textContent = 'This image could not be opened. Try another image.'; });
   window.addEventListener('pagehide', () => localUrls.forEach(url => URL.revokeObjectURL(url)));
 }
+
+const mobilePageOrder = [
+  'index.html', 'work.html', 'project-01.html', 'body-and-soil.html',
+  'project-03.html', 'project-04.html', 'project-05.html', 'project-06.html',
+  'project-07.html', 'project-08.html', 'project-09.html', 'project-10.html',
+  'project-11.html', 'project-12.html', 'project-13.html', 'project-14.html',
+  'project-15.html', 'about.html', 'idea-box.html', 'contact.html',
+];
+if (matchMedia('(max-width: 800px)').matches) {
+  let swipeStart = null;
+  document.addEventListener('touchstart', event => {
+    if (event.touches.length !== 1) { swipeStart = null; return; }
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest('a, button, input, textarea, select, [contenteditable="true"], .work-gallery, .idea-board')) {
+      swipeStart = null;
+      return;
+    }
+    const touch = event.touches[0];
+    swipeStart = { x: touch.clientX, y: touch.clientY };
+  }, { passive: true });
+  document.addEventListener('touchend', event => {
+    if (!swipeStart || !matchMedia('(max-width: 800px)').matches) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - swipeStart.x;
+    const dy = touch.clientY - swipeStart.y;
+    swipeStart = null;
+    if (Math.abs(dx) < 72 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+    const current = location.pathname.split('/').pop() || 'index.html';
+    const index = mobilePageOrder.indexOf(current);
+    const next = mobilePageOrder[index + (dx < 0 ? 1 : -1)];
+    if (index >= 0 && next) location.assign(new URL(next, location.href));
+  }, { passive: true });
+  document.addEventListener('touchcancel', () => { swipeStart = null; }, { passive: true });
+}
