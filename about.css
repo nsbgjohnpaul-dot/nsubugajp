@@ -145,11 +145,11 @@ body.page-about > .about-background-stage { position: absolute; z-index: 0; left
 .page-about .approach-dialog .approach-close { display:flex; align-items:center; justify-content:center; width:32px; height:32px; padding:0; border:0; background:transparent; color:inherit; font:400 26px/1 var(--font-body); cursor:pointer; }
 .page-about .approach-dialog .approach-close:focus-visible { outline:2px solid currentColor; outline-offset:2px; }
 /* Display each stage from the supplied illustration strip. */
-.page-about .approach-dialog .process-illustration { height:auto; aspect-ratio:416 / 422; margin-bottom:1.25rem; border-bottom:0; mix-blend-mode:multiply; }
+.page-about .approach-dialog .process-illustration { height:auto; aspect-ratio:416 / 422; margin-bottom:1.25rem; border-bottom:0; }
 .page-about .approach-dialog .process-illustration svg { width:100%; height:100%; max-width:none; overflow:hidden; }
-/* Turn the black artwork to the site orange on hover. */
-.page-about .approach-dialog .process-illustration:hover > svg { filter:url(#process-orange); }
-/* Clip each stage before applying its hover color and reduce the artwork scale. */
+/* Tint the illustration ink and make its paper transparent. */
+.page-about .approach-dialog .process-illustration > svg { filter:url(#process-theme-ink); }
+/* Clip each stage before applying its color and reduce the artwork scale. */
 .page-about .approach-dialog .process-illustration { overflow:hidden; aspect-ratio:416 / 380; }
 .page-about .approach-dialog .process-illustration svg { flex:none; width:90%; height:auto; aspect-ratio:416 / 422; }
 /* Use identical frames and a shared artwork scale for every stage. */

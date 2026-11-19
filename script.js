@@ -88,95 +88,51 @@ if (approachLink && processSection) {
 
 const ideaBoard = document.querySelector('.idea-board');
 if (ideaBoard) {
-  const tiles = [...ideaBoard.querySelectorAll('.idea-tile')];
+  const projects = {
+    '01': ['Spirits Packaging', 'A bottle and label study photographed with smoke and warm lighting.'],
+    '02': ['3D Game Art Portfolio', 'A portfolio cover that sets bold typography against an atmospheric 3D cityscape.'],
+    '03': ['Spirits Packaging', 'A close-up study of the bottle silhouette, label and textured details.'],
+    '04': ['Chill Out Café', 'A café identity applied to menus, takeaway cups and printed graphics.'],
+    '05': ['Spirits Packaging', 'A studio study using directional light to reveal the glass and label.'],
+    '06': ['Cista', 'A spirits label exploration with botanical artwork and a warm product setting.'],
+    '07': ['Cista', 'A botanical label and bottle study styled with natural materials.'],
+    '08': ['Catpuccino', 'A playful café website concept built around an illustrated cat identity.'],
+  };
   const viewer = ideaBoard.querySelector('[data-artwork-viewer]');
   const preview = viewer.querySelector('.idea-preview');
-  const prompt = viewer.querySelector('.idea-viewer-prompt');
-  const close = viewer.querySelector('.idea-preview-close');
-  const status = viewer.querySelector('.idea-viewer-status');
-  const upload = ideaBoard.querySelector('[data-artwork-upload]');
-  const localUrls = new Set();
-  let uploadTarget = null;
-  let previewUrl = null;
-  function showArtwork(src, description, selectedTile) {
-    if (previewUrl) { URL.revokeObjectURL(previewUrl); localUrls.delete(previewUrl); previewUrl = null; }
-    preview.src = src;
-    preview.alt = description;
-    preview.hidden = false;
-    prompt.hidden = true;
-    close.hidden = false;
-    status.textContent = '';
-    tiles.forEach(tile => tile.setAttribute('aria-pressed', String(tile === selectedTile)));
+  const details = document.querySelector('.idea-project');
+  const projectName = details.querySelector('h2');
+  const projectDescription = details.querySelector('.idea-project-description');
+  const previewCaption = viewer.querySelector('.idea-preview-caption');
+  const tiles = ideaBoard.querySelectorAll('.idea-tile');
+
+  function showProject(tile) {
+    const [name, description] = projects[tile.dataset.artwork];
+    projectName.textContent = name;
+    projectDescription.textContent = description;
   }
-  function readArtwork(file, tile) {
-    if (!file || !file.type.startsWith('image/')) { status.textContent = 'Choose an image file to view.'; return; }
-    const url = URL.createObjectURL(file);
-    localUrls.add(url);
-    if (tile) {
-      const oldImage = tile.querySelector('img');
-      if (oldImage && localUrls.has(oldImage.src)) { URL.revokeObjectURL(oldImage.src); localUrls.delete(oldImage.src); }
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = file.name;
-      img.draggable = true;
-      tile.replaceChildren(img);
-      tile.classList.remove('idea-tile--empty');
-      tile.setAttribute('aria-label', 'View ' + file.name);
-      showArtwork(url, file.name, tile);
-    } else {
-      showArtwork(url, file.name);
-      previewUrl = url;
-    }
-  }
+
   tiles.forEach(tile => {
+    const artwork = tile.querySelector('img');
+    const [name, description] = projects[tile.dataset.artwork];
+    tile.setAttribute('aria-label', 'View ' + name);
+    tile.addEventListener('pointerenter', () => showProject(tile));
+    tile.addEventListener('focus', () => showProject(tile));
     tile.addEventListener('click', () => {
-      const img = tile.querySelector('img');
-      if (img) showArtwork(img.src, img.alt, tile);
-      else { uploadTarget = tile; upload.click(); }
-    });
-    tile.addEventListener('dragstart', event => {
-      if (!tile.querySelector('img')) { event.preventDefault(); return; }
-      event.dataTransfer.setData('application/x-idea-artwork', tile.dataset.artwork);
-      event.dataTransfer.effectAllowed = 'copy';
-    });
-    tile.addEventListener('dragover', event => { if (event.dataTransfer.types.includes('Files')) event.preventDefault(); });
-    tile.addEventListener('drop', event => {
-      if (!event.dataTransfer.files.length) return;
-      event.preventDefault();
-      readArtwork(event.dataTransfer.files[0], tile);
+      showProject(tile);
+      preview.src = artwork.dataset.previewSrc || artwork.src;
+      preview.alt = artwork.alt;
+      previewCaption.querySelector('strong').textContent = name;
+      previewCaption.querySelector('p').textContent = description;
+      viewer.showModal();
     });
   });
-  viewer.addEventListener('dragover', event => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
-    viewer.classList.add('is-dragover');
-  });
-  viewer.addEventListener('dragleave', event => {
-    if (!viewer.contains(event.relatedTarget)) viewer.classList.remove('is-dragover');
-  });
-  viewer.addEventListener('drop', event => {
-    event.preventDefault();
-    viewer.classList.remove('is-dragover');
-    const id = event.dataTransfer.getData('application/x-idea-artwork');
-    const tile = tiles.find(item => item.dataset.artwork === id);
-    const img = tile && tile.querySelector('img');
-    if (img) showArtwork(img.src, img.alt, tile);
-    else if (event.dataTransfer.files.length) readArtwork(event.dataTransfer.files[0]);
-  });
-  upload.addEventListener('change', () => { readArtwork(upload.files[0], uploadTarget); upload.value = ''; });
-  close.addEventListener('click', () => {
-    if (previewUrl) { URL.revokeObjectURL(previewUrl); localUrls.delete(previewUrl); previewUrl = null; }
-    preview.hidden = true;
+
+  showProject(tiles[0]);
+  viewer.addEventListener('close', () => {
     preview.removeAttribute('src');
-    close.hidden = true;
-    prompt.hidden = false;
-    status.textContent = '';
-    const selected = tiles.find(tile => tile.getAttribute('aria-pressed') === 'true');
-    tiles.forEach(tile => tile.setAttribute('aria-pressed', 'false'));
-    if (selected) selected.focus();
+    preview.alt = '';
   });
-  preview.addEventListener('error', () => { status.textContent = 'This image could not be opened. Try another image.'; });
-  window.addEventListener('pagehide', () => localUrls.forEach(url => URL.revokeObjectURL(url)));
 }
 
 const themeToggle = document.querySelector('[data-theme-toggle]');
@@ -207,9 +163,41 @@ window.addEventListener('storage', (event) => {
   if (event.key === themeStorageKey) applyTheme(event.newValue || 'light');
 });
 
+const homeProjects = document.querySelector('[data-home-projects]');
+if (homeProjects) {
+  const covers = [...homeProjects.querySelectorAll('.home-project-cover')];
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let current = 0;
+
+  setInterval(() => {
+    if (reducedMotion.matches || document.hidden) return;
+
+    const outgoing = covers[current];
+    current = (current + 1) % covers.length;
+    const incoming = covers[current];
+    incoming.hidden = false;
+    incoming.classList.add('is-entering');
+    outgoing.animate(
+      [{ filter: 'brightness(1)' }, { filter: 'brightness(.62)' }],
+      { duration: 780, easing: 'ease-out' }
+    );
+    incoming.animate(
+      [
+        { clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)', transform: 'scale(1.08)' },
+        { clipPath: 'polygon(0 0, 100% 0, 100% 34%, 0 77%)', transform: 'scale(1.035)', offset: .55 },
+        { clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', transform: 'scale(1)' },
+      ],
+      { duration: 780, easing: 'cubic-bezier(.25,.75,.25,1)' }
+    ).onfinish = () => {
+      outgoing.hidden = true;
+      incoming.classList.remove('is-entering');
+    };
+  }, 3600);
+}
+
 const mobilePageOrder = [
   'index.html', 'work.html', 'project-01.html', 'body-and-soil.html',
-  'project-03.html', 'project-04.html', 'project-05.html', 'project-06.html',
+  'project-03.html', '27-guns-pop-beer.html', 'project-04.html', 'project-05.html', 'project-06.html',
   'project-07.html', 'project-08.html', 'project-09.html', 'project-10.html',
   'project-11.html', 'project-12.html', 'project-13.html', 'project-14.html',
   'project-15.html', 'about.html', 'idea-box.html', 'contact.html',

@@ -700,6 +700,12 @@ body > :not(.skip) { position: relative; z-index: 1; }
   height: clamp(22rem, 38vw, 36rem);
   object-fit: cover;
 }
+.case-section .gallery img.case-gallery-wide {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 .case .cta {
   display: flex;
   align-items: flex-start;
