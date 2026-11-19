@@ -3,8 +3,8 @@ body.page-idea { height: auto; min-height: 100svh; overflow-x: hidden; overflow-
 body.page-idea .site-header { flex: 0 0 auto; height: 16.7vw; max-height: 171px; min-height: 145px; }
 body.page-idea .idea-main { flex: 1 0 auto; gap: 0; padding: 0; }
 .page-idea .idea-main .idea-heading { width: 60.2vw; margin: 0 0 0 20.9375vw; grid-template-columns: 30.52vw 1fr; align-items: center; gap: 0; min-height: 4.323vw; }
-.page-idea .idea-heading h1 { font-family: var(--font-body); font-size: 3.3333vw; line-height: 1.3; letter-spacing: 0; color: #0d0d0d; }
-.page-idea .idea-heading p { font-size: clamp(11px, .729167vw, 14px); line-height: 1.3; color: #0d0d0d; }
+.page-idea .idea-heading h1 { font-family: var(--font-body); font-size: 3.3333vw; line-height: 1.3; letter-spacing: 0; color: var(--ink); }
+.page-idea .idea-heading p { font-size: clamp(11px, .729167vw, 14px); line-height: 1.3; color: var(--ink); }
 .page-idea .idea-main .idea-board { flex: none; width: 46.145833vw; aspect-ratio: 886 / 579.7255; margin: 1.354167vw 0 0 20.9375vw; }
 .page-idea .idea-board .explorations { height: 100%; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 0; }
 .page-idea .idea-board .idea-tile { grid-area: auto; border: 0; }
@@ -59,7 +59,7 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 .page-idea .idea-board .idea-tile:nth-child(5) img { height:103.19%; top:-1.89%; }
 .page-idea .idea-board .idea-drop-label { left:33.6343115%; top:29.3247347%; width:32.9571106%; height:34.67158%; }
 .page-idea .idea-viewer-prompt { position:absolute; left:6.5068493%; top:40.7960199%; width:86.9863014%; line-height:1.3; }
-.idea-project h2 { font-family:var(--font-body); font-weight:700; letter-spacing:0; line-height:.9; color:#0d0d0d; }
+.idea-project h2 { font-family:var(--font-body); font-weight:700; letter-spacing:0; line-height:.9; color:var(--ink); }
 .idea-project h2 span { font-weight:600; }
 .idea-project .eyebrow { text-transform:none; color:#b8b5ad; font-weight:600; letter-spacing:0; }
 @media (min-width:801px) {

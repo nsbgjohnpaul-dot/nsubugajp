@@ -12,13 +12,18 @@
   <link rel="stylesheet" href="shared-ui.css">
   <link rel="stylesheet" href="about-motion.css">
   <script src="about-background.js" defer></script>
-  <script src="about-interaction.js" defer></script>
+
+
+
+
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="theme.css">
+
 </head>
 <body class="page-home">
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header wrap">
-    <button class="audio-indicator" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute interface sounds"><span class="audio-label">Audio</span><img class="audio-reference-control" src="assets/about-audio-control.svg" alt=""><picture class="audio-reference-wave"><source media="(max-width: 800px)" srcset="assets/mobile-audio-wave.svg"><img src="assets/about-audio-wave.svg" alt=""></picture></button>
+    <button class="audio-indicator" type="button" data-audio-toggle aria-pressed="true" aria-label="Mute click sounds"><span class="audio-label">Audio</span><span class="audio-play" aria-hidden="true" hidden></span><img class="audio-reference-control" src="assets/about-audio-control.svg" alt=""><img class="audio-reference-wave" src="assets/about-audio-wave.svg" alt=""></button>
     <nav aria-label="Main navigation">
       <span class="menu-label">Menu</span>
       <a href="work.html">Work</a>
@@ -26,12 +31,16 @@
       <a href="idea-box.html">Idea Box</a>
       <a href="contact.html">Contact</a>
     </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+      <svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <svg class="theme-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 2a9 9 0 1 0 7 14A8 8 0 0 1 15 2Z"/><path d="m20 2 .7 2.3L23 5l-2.3.7L20 8l-.7-2.3L17 5l2.3-.7Z"/></svg>
+      <span class="theme-thumb" aria-hidden="true"></span>
+    </button>
     <div class="header-location"><p class="location">Working Globally</p><time class="clock" data-clock>EAT</time></div>
     <p class="header-inquiry">For Inquiries <a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></p>
   </header>
   <main id="main" class="wrap home-main">
     <section class="home">
-      <div class="art" aria-hidden="true"><img class="particles" src="assets/particle-art.png" alt=""><img class="type-art" src="assets/typography-art.png" alt=""></div>
       <div class="home-meta">
         <p>Independent designer</p>
         <p>Art direction / Digital experiences</p>

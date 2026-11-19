@@ -14,7 +14,7 @@ body.page-about .about-main { display: grid; flex: none; position: relative; gri
 .page-about .about-details ul { font-size: .9375vw; font-weight: 600; line-height: 1.666667; margin: 0; }
 .page-about .about-capabilities li,
 .page-about .about-details li { margin: 0; line-height: inherit; }
-.page-about .about-main .about-intro img { position: absolute; z-index: 1; left: 61.927083vw; top: -6.71875vw; width: 39.0625vw; height: max(49.270833vw, calc(100svh - 4.0625vw)); max-height: none; transform: none; object-fit: fill; object-position: bottom; }
+.page-about .about-main .about-intro img { position: absolute; z-index: 1; left: 61.927083vw; top: -6.71875vw; width: 39.0625vw; height: 49.270833vw; max-height: none; transform: none; object-fit: fill; object-position: bottom; }
 .page-about .about-main .about-statement { display: contents; }
 .page-about .about-main .about-statement .eyebrow { grid-column: 1; grid-row: 2; padding-left: 11.302083vw; text-align: left; margin: 0; color: #ff4000; font: 700 1.770833vw/1.2 var(--font-body); }
 .page-about .about-main .about-statement h2 { grid-column: 1; grid-row: 3; width: 37.5vw; margin: 0; color: #ff4000; font: 700 1.979167vw/1.21 var(--font-body); letter-spacing: 0; text-transform: uppercase; }
@@ -89,3 +89,70 @@ body.page-about > .about-background-stage { position: absolute; z-index: 0; left
 @media (min-width:801px) {
   .page-about .about-main .about-statement h2 { transform:translateY(-40px); }
 }
+
+/* Match Approach & Process to the About page typography. */
+.page-about .approach-dialog { font-family:var(--font-body); font-size:.9375vw; line-height:1.666667; }
+.page-about .approach-dialog .process > h2,
+.page-about .approach-dialog .cta h2 { font-family:var(--font-body); font-size:1.979167vw; font-weight:700; line-height:1.21; letter-spacing:0; }
+.page-about .approach-dialog .process > h2 { margin-bottom:1rem; }
+.page-about .approach-dialog .process > p + h2 { margin-top:2rem; }
+.page-about .approach-dialog .process-grid h3 { font-family:var(--font-body); font-size:.9375vw; font-weight:700; line-height:1.666667; letter-spacing:0; }
+.page-about .approach-dialog p,
+.page-about .approach-dialog .cta > a { font-size:inherit; line-height:inherit; }
+.page-about .approach-dialog .approach-close { font:600 clamp(10px,.7291667vw,14px)/1.5 var(--font-body); }
+@media (max-width:800px) {
+  .page-about .approach-dialog { font-size:16px; }
+  .page-about .approach-dialog .process > h2,
+  .page-about .approach-dialog .cta h2 { font-size:clamp(1.2rem,4.5vw,2rem); }
+  .page-about .approach-dialog .process-grid h3 { font-size:16px; }
+  .page-about .approach-dialog .approach-close { font-size:12px; }
+}
+/* Use the case-study contact and footer layout in Approach & Process. */
+.page-about .approach-dialog .cta { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; border:0; padding-top:0; }
+.page-about .approach-dialog .cta h2 { margin:0; }
+.page-about .approach-dialog .cta > a { margin-top:.5rem; font-size:.9rem; }
+.page-about .approach-dialog .case-footer > a:first-child { font:700 12px/1.25 var(--font-body); letter-spacing:0; text-transform:none; }
+@media (max-width:800px) {
+  .page-about .approach-dialog .cta { flex-direction:column; }
+  .page-about .approach-dialog .case-footer { flex-wrap:wrap; }
+}
+/* Illustrated five-stage process, following the supplied scenario reference. */
+.page-about .approach-dialog { width:min(82rem,94vw); }
+.page-about .approach-dialog .process-grid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; margin-top:2rem; }
+.page-about .approach-dialog .process-grid article { border:0; padding:0; text-align:center; min-width:0; }
+.page-about .approach-dialog .process-illustration { height:clamp(100px,12vw,170px); border-bottom:1px solid var(--ink); display:flex; justify-content:center; align-items:flex-end; color:var(--ink); margin-bottom:1.25rem; }
+.page-about .approach-dialog .process-illustration svg { display:block; height:100%; width:100%; max-width:180px; }
+.page-about .approach-dialog .process-grid h3 { min-height:3.34em; padding-inline:.65rem; margin:0; }
+.page-about .approach-dialog .process-grid p { margin:.75rem 0 0; padding-inline:.8rem; }
+@media(max-width:800px) {
+  .page-about .approach-dialog .process-grid { grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:2rem; }
+  .page-about .approach-dialog .process-illustration { height:130px; }
+}
+@media(max-width:480px) {
+  .page-about .approach-dialog .process-grid { grid-template-columns:minmax(0,1fr); }
+  .page-about .approach-dialog .process-grid article { max-width:28rem; margin-inline:auto; width:100%; }
+  .page-about .approach-dialog .process-grid h3 { min-height:0; }
+  .page-about .approach-dialog .process-grid p { padding-inline:.5rem; }
+}
+/* Smaller descriptions under the illustrated process steps. */
+.page-about .approach-dialog .process-grid p { font-size:.8vw; line-height:1.6; }
+@media(max-width:800px) {
+  .page-about .approach-dialog .process-grid p { font-size:14px; }
+}
+.page-about .approach-dialog .process-illustration img { display:block; width:auto; height:100%; max-width:100%; object-fit:contain; mix-blend-mode:multiply; }
+
+/* Simple borderless close icon. */
+.page-about .approach-dialog .approach-close { display:flex; align-items:center; justify-content:center; width:32px; height:32px; padding:0; border:0; background:transparent; color:inherit; font:400 26px/1 var(--font-body); cursor:pointer; }
+.page-about .approach-dialog .approach-close:focus-visible { outline:2px solid currentColor; outline-offset:2px; }
+/* Display each stage from the supplied illustration strip. */
+.page-about .approach-dialog .process-illustration { height:auto; aspect-ratio:416 / 422; margin-bottom:1.25rem; border-bottom:0; mix-blend-mode:multiply; }
+.page-about .approach-dialog .process-illustration svg { width:100%; height:100%; max-width:none; overflow:hidden; }
+/* Turn the black artwork to the site orange on hover. */
+.page-about .approach-dialog .process-illustration:hover > svg { filter:url(#process-orange); }
+/* Clip each stage before applying its hover color and reduce the artwork scale. */
+.page-about .approach-dialog .process-illustration { overflow:hidden; aspect-ratio:416 / 380; }
+.page-about .approach-dialog .process-illustration svg { flex:none; width:90%; height:auto; aspect-ratio:416 / 422; }
+/* Use identical frames and a shared artwork scale for every stage. */
+.page-about .approach-dialog .process-illustration { aspect-ratio:469 / 380; }
+.page-about .approach-dialog .process-illustration > svg { width:90%; height:auto; aspect-ratio:469 / 422; }
+.page-about .approach-dialog .process-illustration > svg > svg { width:revert; height:revert; aspect-ratio:auto; }

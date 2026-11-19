@@ -15,54 +15,50 @@ function updateClock() {
 updateClock();
 window.setInterval(updateClock, 1000);
 
-const soundButton = document.querySelector('[data-sound-toggle]');
-let uiSoundsEnabled = soundButton?.getAttribute('aria-pressed') === 'true';
-
-let uiAudioContext;
-function playUiSound(kind) {
-  if (!uiSoundsEnabled) return;
-  const AudioContext = window.AudioContext;
+const audioButton = document.querySelector('[data-audio-toggle]');
+let clicksEnabled = true;
+let clickContext;
+function playClick() {
+  if (!clicksEnabled) return;
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
-  uiAudioContext ??= new AudioContext();
-  const context = uiAudioContext;
+  clickContext ??= new AudioContext();
+  const context = clickContext;
   const play = () => {
-    if (context.state !== 'running') return;
     const now = context.currentTime;
-    const isHover = kind === 'hover';
-    const duration = isHover ? 0.075 : 0.04;
     const oscillator = context.createOscillator();
     const gain = context.createGain();
-    oscillator.type = isHover ? 'sine' : 'triangle';
-    oscillator.frequency.setValueAtTime(isHover ? 260 : 920, now);
-    oscillator.frequency.exponentialRampToValueAtTime(isHover ? 165 : 560, now + duration);
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(isHover ? 0.012 : 0.022, now + 0.006);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(900, now);
+    oscillator.frequency.exponentialRampToValueAtTime(350, now + 0.035);
+    gain.gain.setValueAtTime(0.025, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
     oscillator.connect(gain);
     gain.connect(context.destination);
     oscillator.start(now);
-    oscillator.stop(now + duration);
+    oscillator.stop(now + 0.04);
   };
   if (context.state === 'running') play();
-  else context.resume().then(play).catch(error => {
-    console.warn('The browser did not allow the UI sound to play.', error);
+  else context.resume().then(play).catch(() => {});
+}
+if (audioButton) {
+  const syncAudioControl = () => {
+    audioButton.setAttribute('aria-pressed', String(clicksEnabled));
+    audioButton.setAttribute('aria-label', clicksEnabled ? 'Mute click sounds' : 'Enable click sounds');
+    audioButton.querySelector('.audio-play').hidden = clicksEnabled;
+    audioButton.querySelector('.audio-reference-control').hidden = !clicksEnabled;
+  };
+  syncAudioControl();
+  audioButton.addEventListener('click', () => {
+    clicksEnabled = !clicksEnabled;
+    syncAudioControl();
   });
 }
-
 document.addEventListener('click', event => {
   if (!event.isTrusted || !(event.target instanceof Element)) return;
   const control = event.target.closest('a, button, input[type="button"], input[type="submit"], [role="button"]');
-  if (control && control !== soundButton && !control.disabled) playUiSound('click');
+  if (control && !control.disabled) playClick();
 });
-
-if (soundButton) {
-  soundButton.addEventListener('click', () => {
-    uiSoundsEnabled = !uiSoundsEnabled;
-    soundButton.setAttribute('aria-pressed', String(uiSoundsEnabled));
-    soundButton.setAttribute('aria-label', `${uiSoundsEnabled ? 'Mute' : 'Enable'} interface sounds`);
-  });
-}
-
 // Keep About on one screen while retaining the detailed process content.
 const approachLink = document.querySelector('.about-main .approach-link');
 const processSection = document.querySelector('.about-main .process');
@@ -73,10 +69,13 @@ if (approachLink && processSection) {
   const closeButton = document.createElement('button');
   closeButton.type = 'button';
   closeButton.className = 'approach-close';
-  closeButton.textContent = 'Close';
+  closeButton.textContent = '\u00D7';
+  closeButton.setAttribute('aria-label', 'Close');
   dialog.append(closeButton, processSection);
   const contactSection = document.querySelector('.about-main > .cta');
   if (contactSection) dialog.append(contactSection);
+  const approachFooter = document.querySelector('.about-main > .case-footer');
+  if (approachFooter) dialog.append(approachFooter);
   document.body.append(dialog);
   approachLink.setAttribute('aria-haspopup', 'dialog');
   approachLink.addEventListener('click', (event) => {
@@ -90,16 +89,6 @@ if (approachLink && processSection) {
 const ideaBoard = document.querySelector('.idea-board');
 if (ideaBoard) {
   const tiles = [...ideaBoard.querySelectorAll('.idea-tile')];
-  let lastHoverSound = 0;
-  ideaBoard.addEventListener('pointerover', event => {
-    if (!uiSoundsEnabled || event.pointerType !== 'mouse' || !(event.target instanceof Element)) return;
-    const tile = event.target.closest('.idea-tile');
-    if (!tile || tile.contains(event.relatedTarget)) return;
-    const now = performance.now();
-    if (now - lastHoverSound < 120) return;
-    lastHoverSound = now;
-    playUiSound('hover');
-  });
   const viewer = ideaBoard.querySelector('[data-artwork-viewer]');
   const preview = viewer.querySelector('.idea-preview');
   const prompt = viewer.querySelector('.idea-viewer-prompt');
@@ -189,6 +178,34 @@ if (ideaBoard) {
   preview.addEventListener('error', () => { status.textContent = 'This image could not be opened. Try another image.'; });
   window.addEventListener('pagehide', () => localUrls.forEach(url => URL.revokeObjectURL(url)));
 }
+
+const themeToggle = document.querySelector('[data-theme-toggle]');
+const themeStorageKey = 'portfolio-theme';
+function applyTheme(theme) {
+  const dark = theme === 'dark';
+  document.body.classList.toggle('theme-dark', dark);
+  document.querySelectorAll('[data-theme-portrait]').forEach(portrait => {
+    const source = dark ? portrait.dataset.darkSrc : portrait.dataset.lightSrc;
+    if (portrait.getAttribute('src') !== source) portrait.setAttribute('src', source);
+  });
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-pressed', String(dark));
+    themeToggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+}
+let savedTheme = 'light';
+try { savedTheme = localStorage.getItem(themeStorageKey) || 'light'; } catch {}
+applyTheme(savedTheme);
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const theme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
+    applyTheme(theme);
+    try { localStorage.setItem(themeStorageKey, theme); } catch {}
+  });
+}
+window.addEventListener('storage', (event) => {
+  if (event.key === themeStorageKey) applyTheme(event.newValue || 'light');
+});
 
 const mobilePageOrder = [
   'index.html', 'work.html', 'project-01.html', 'body-and-soil.html',

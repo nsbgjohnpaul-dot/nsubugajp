@@ -14,11 +14,12 @@
   <link rel="stylesheet" href="about-motion.css">
   <script src="about-background.js" defer></script>
   <script src="about-interaction.js" defer></script>
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body class="page-idea">
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header wrap">
-    <button class="audio-indicator" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute interface sounds"><span class="audio-label">Audio</span><img class="audio-reference-control" src="assets/about-audio-control.svg" alt=""><picture class="audio-reference-wave"><source media="(max-width: 800px)" srcset="assets/mobile-audio-wave.svg"><img src="assets/about-audio-wave.svg" alt=""></picture></button>
+    <button class="audio-indicator" type="button" data-audio-toggle aria-pressed="true" aria-label="Mute click sounds"><span class="audio-label">Audio</span><span class="audio-play" aria-hidden="true" hidden></span><img class="audio-reference-control" src="assets/about-audio-control.svg" alt=""><img class="audio-reference-wave" src="assets/about-audio-wave.svg" alt=""></button>
     <nav aria-label="Main navigation">
       <span class="menu-label">Menu</span>
       <a href="work.html">Work</a>
@@ -26,6 +27,11 @@
       <a href="idea-box.html" aria-current="page">Idea Box</a>
       <a href="contact.html">Contact</a>
     </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+      <svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <svg class="theme-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 2a9 9 0 1 0 7 14A8 8 0 0 1 15 2Z"/><path d="m20 2 .7 2.3L23 5l-2.3.7L20 8l-.7-2.3L17 5l2.3-.7Z"/></svg>
+      <span class="theme-thumb" aria-hidden="true"></span>
+    </button>
     <div class="header-location"><p class="location">Working Globally</p><time class="clock" data-clock>EAT</time></div>
     <p class="header-inquiry">For Inquiries <a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></p>
   </header>
@@ -33,30 +39,30 @@
     <div class="idea-heading"><h1>IDEA BOX</h1><p>A collection of visual experiments,<br>brand explorations and things in progress.</p></div>
     <section class="idea-board" aria-label="Visual experiments">
       <div class="explorations">
-        <button class="idea-tile" type="button" data-artwork="01" aria-label="View artwork 01"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
-        <button class="idea-tile" type="button" data-artwork="02" aria-label="View artwork 02"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-02.png" alt="Visual exploration 02"></button>
-        <button class="idea-tile" type="button" data-artwork="03" aria-label="View artwork 03"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-03.png" alt="Visual exploration 03"></button>
-        <button class="idea-tile" type="button" data-artwork="04" aria-label="View artwork 01"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
-        <button class="idea-tile" type="button" data-artwork="05" aria-label="View artwork 02"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-02.png" alt="Visual exploration 02"></button>
-        <button class="idea-tile" type="button" data-artwork="06" aria-label="View artwork 03"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-03.png" alt="Visual exploration 03"></button>
-        <button class="idea-tile" type="button" data-artwork="07" aria-label="View artwork 05"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-05.png" alt="Visual exploration 05"></button>
-        <button class="idea-tile" type="button" data-artwork="08" aria-label="View artwork 06"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-06.png" alt="Visual exploration 06"></button>
-        <button class="idea-tile" type="button" data-artwork="09" aria-label="View artwork 07"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-07.png" alt="Visual exploration 07"></button>
-        <button class="idea-tile" type="button" data-artwork="10" aria-label="View artwork 05"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-05.png" alt="Visual exploration 05"></button>
-        <button class="idea-tile" type="button" data-artwork="11" aria-label="View artwork 06"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-06.png" alt="Visual exploration 06"></button>
-        <button class="idea-tile" type="button" data-artwork="12" aria-label="View artwork 07"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-07.png" alt="Visual exploration 07"></button>
-        <button class="idea-tile" type="button" data-artwork="13" aria-label="View artwork 04"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
-        <button class="idea-tile" type="button" data-artwork="14" aria-label="View artwork 08"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
-        <button class="idea-tile" type="button" data-artwork="15" aria-label="View artwork 01"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
-        <button class="idea-tile" type="button" data-artwork="16" aria-label="View artwork 04"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
-        <button class="idea-tile" type="button" data-artwork="17" aria-label="View artwork 08"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
-        <button class="idea-tile" type="button" data-artwork="18" aria-label="View artwork 01"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
-        <button class="idea-tile" type="button" data-artwork="19" aria-label="View artwork 04"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
-        <button class="idea-tile" type="button" data-artwork="20" aria-label="View artwork 08"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
-        <button class="idea-tile" type="button" data-artwork="21" aria-label="View artwork 01"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
-        <button class="idea-tile" type="button" data-artwork="22" aria-label="View artwork 04"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
-        <button class="idea-tile" type="button" data-artwork="23" aria-label="View artwork 08"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
-        <button class="idea-tile" type="button" data-artwork="24" aria-label="View artwork 01"><img loading="lazy" decoding="async" draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
+        <button class="idea-tile" type="button" data-artwork="01" aria-label="View artwork 01"><img draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
+        <button class="idea-tile" type="button" data-artwork="02" aria-label="View artwork 02"><img draggable="true" src="assets/exploration-02.png" alt="Visual exploration 02"></button>
+        <button class="idea-tile" type="button" data-artwork="03" aria-label="View artwork 03"><img draggable="true" src="assets/exploration-03.png" alt="Visual exploration 03"></button>
+        <button class="idea-tile" type="button" data-artwork="04" aria-label="View artwork 01"><img draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
+        <button class="idea-tile" type="button" data-artwork="05" aria-label="View artwork 02"><img draggable="true" src="assets/exploration-02.png" alt="Visual exploration 02"></button>
+        <button class="idea-tile" type="button" data-artwork="06" aria-label="View artwork 03"><img draggable="true" src="assets/exploration-03.png" alt="Visual exploration 03"></button>
+        <button class="idea-tile" type="button" data-artwork="07" aria-label="View artwork 05"><img draggable="true" src="assets/exploration-05.png" alt="Visual exploration 05"></button>
+        <button class="idea-tile" type="button" data-artwork="08" aria-label="View artwork 06"><img draggable="true" src="assets/exploration-06.png" alt="Visual exploration 06"></button>
+        <button class="idea-tile" type="button" data-artwork="09" aria-label="View artwork 07"><img draggable="true" src="assets/exploration-07.png" alt="Visual exploration 07"></button>
+        <button class="idea-tile" type="button" data-artwork="10" aria-label="View artwork 05"><img draggable="true" src="assets/exploration-05.png" alt="Visual exploration 05"></button>
+        <button class="idea-tile" type="button" data-artwork="11" aria-label="View artwork 06"><img draggable="true" src="assets/exploration-06.png" alt="Visual exploration 06"></button>
+        <button class="idea-tile" type="button" data-artwork="12" aria-label="View artwork 07"><img draggable="true" src="assets/exploration-07.png" alt="Visual exploration 07"></button>
+        <button class="idea-tile" type="button" data-artwork="13" aria-label="View artwork 04"><img draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
+        <button class="idea-tile" type="button" data-artwork="14" aria-label="View artwork 08"><img draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
+        <button class="idea-tile" type="button" data-artwork="15" aria-label="View artwork 01"><img draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
+        <button class="idea-tile" type="button" data-artwork="16" aria-label="View artwork 04"><img draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
+        <button class="idea-tile" type="button" data-artwork="17" aria-label="View artwork 08"><img draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
+        <button class="idea-tile" type="button" data-artwork="18" aria-label="View artwork 01"><img draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
+        <button class="idea-tile" type="button" data-artwork="19" aria-label="View artwork 04"><img draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
+        <button class="idea-tile" type="button" data-artwork="20" aria-label="View artwork 08"><img draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
+        <button class="idea-tile" type="button" data-artwork="21" aria-label="View artwork 01"><img draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
+        <button class="idea-tile" type="button" data-artwork="22" aria-label="View artwork 04"><img draggable="true" src="assets/exploration-04.png" alt="Visual exploration 04"></button>
+        <button class="idea-tile" type="button" data-artwork="23" aria-label="View artwork 08"><img draggable="true" src="assets/exploration-08.png" alt="Visual exploration 08"></button>
+        <button class="idea-tile" type="button" data-artwork="24" aria-label="View artwork 01"><img draggable="true" src="assets/exploration-01.png" alt="Visual exploration 01"></button>
       </div>
       <div class="idea-drop-label" data-artwork-viewer role="region" aria-label="Artwork viewer">
         <p class="idea-viewer-prompt">DRAG AND DROP TO VIEW</p>

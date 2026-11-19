@@ -14,11 +14,12 @@
   <link rel="stylesheet" href="about-motion.css">
   <script src="about-background.js" defer></script>
   <script src="about-interaction.js" defer></script>
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body class="page-about">
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header wrap">
-    <button class="audio-indicator" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute interface sounds"><span class="audio-label">Audio</span><img class="audio-reference-control" src="assets/about-audio-control.svg" alt=""><picture class="audio-reference-wave"><source media="(max-width: 800px)" srcset="assets/mobile-audio-wave.svg"><img src="assets/about-audio-wave.svg" alt=""></picture></button>
+    <button class="audio-indicator" type="button" data-audio-toggle aria-pressed="true" aria-label="Mute click sounds"><span class="audio-label">Audio</span><span class="audio-play" aria-hidden="true" hidden></span><img class="audio-reference-control" src="assets/about-audio-control.svg" alt=""><img class="audio-reference-wave" src="assets/about-audio-wave.svg" alt=""></button>
     <nav aria-label="Main navigation">
       <span class="menu-label">Menu</span>
       <a href="work.html">Work</a>
@@ -26,6 +27,11 @@
       <a href="idea-box.html">Idea Box</a>
       <a href="contact.html">Contact</a>
     </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+      <svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <svg class="theme-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 2a9 9 0 1 0 7 14A8 8 0 0 1 15 2Z"/><path d="m20 2 .7 2.3L23 5l-2.3.7L20 8l-.7-2.3L17 5l2.3-.7Z"/></svg>
+      <span class="theme-thumb" aria-hidden="true"></span>
+    </button>
     <div class="header-location"><p class="location">Working Globally</p><time class="clock" data-clock>EAT</time></div>
     <p class="header-inquiry">For Inquiries <a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></p>
   </header>
@@ -40,7 +46,7 @@
         <span aria-hidden="true">tennis........</span>
       </h1>
       <section class="about-capabilities"><p class="eyebrow">Capabilities</p><ul><li>Art Direction</li><li>Website Design</li><li>Application Design</li><li>Interactive Storytelling</li><li>Web Motion &amp; Animation</li><li>Design Systems</li><li>User Experience</li></ul></section>
-      <img src="assets/about-portrait.png" alt="Portrait of Nsubuga John Paul">
+      <img class="about-portrait" src="assets/portrait.png" width="854" height="1024" alt="Portrait of Nsubuga John Paul">
     </section>
     <section class="about-statement">
       <p class="eyebrow">And</p>
@@ -51,14 +57,29 @@
       <section><h2>Trusted By</h2><ul><li>Organizations Gov &amp; Non Gov</li><li>Start Ups</li><li>Schools</li><li>Other Businesses</li></ul></section>
       <p class="year">2000</p>
     </div>
-    <section class="process" id="approach"><h2>Approach &amp; Process</h2>
+    <section class="process" id="approach">
+      <h2>Approach</h2>
+      <p>Every project has its own personality, purpose, and story. I let those guide the visual direction, from typography and imagery to how people interact with the design. I bring those choices together around what the project needs to achieve.</p>
+      <h2>Process</h2>
       <div class="process-grid">
-        <article><h3>01 / Discover</h3><p>Understand the people, the purpose and the problem worth solving.</p></article>
-        <article><h3>02 / Define &amp; design</h3><p>Find the right direction. Shape it into a clear and expressive experience.</p></article>
-        <article><h3>03 / Refine &amp; deliver</h3><p>Work through the details and bring the complete experience together.</p></article>
+        <article><div class="process-illustration" aria-hidden="true"><svg viewBox="0 0 469 422" xmlns="http://www.w3.org/2000/svg"><svg x="37" y="0" width="395" height="422" viewBox="45 110 395 422" overflow="hidden"><defs><filter id="process-orange" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1  0.74902 0 0 0 0.25098  1 0 0 0 0  0 0 0 1 0"/></filter></defs><image href="assets/process%20illustration.png" width="2172" height="724"/></svg></svg></div><h3>1. Discovery</h3><p>I get to know the brief and what the client needs. Together, we agree on the scope, budget, and timeline.</p></article>
+        <article><div class="process-illustration" aria-hidden="true"><svg viewBox="0 0 469 422" xmlns="http://www.w3.org/2000/svg"><svg x="29.5" y="0" width="410" height="422" viewBox="440 110 410 422" overflow="hidden"><image href="assets/process%20illustration.png" width="2172" height="724"/></svg></svg></div><h3>2. Ideation</h3><p>I start with a key page or design element to explore the visual direction. Once we agree on that direction, it guides the rest of the work.</p></article>
+        <article><div class="process-illustration" aria-hidden="true"><svg viewBox="0 0 469 422" xmlns="http://www.w3.org/2000/svg"><svg x="39.5" y="0" width="390" height="422" viewBox="850 110 390 422" overflow="hidden"><image href="assets/process%20illustration.png" width="2172" height="724"/></svg></svg></div><h3>3. Iteration</h3><p>I share the work in progress, refine it with client feedback, and carry the approved direction through the remaining designs.</p></article>
+        <article><div class="process-illustration" aria-hidden="true"><svg viewBox="0 0 469 422" xmlns="http://www.w3.org/2000/svg"><svg x="0" y="0" width="469" height="422" viewBox="1240 110 469 422" overflow="hidden"><image href="assets/process%20illustration.png" width="2172" height="724"/></svg></svg></div><h3>4. Pixel to Production</h3><p>I finalise the artwork for production. On digital projects, I work alongside the development team as they build it.</p></article>
+        <article><div class="process-illustration" aria-hidden="true"><svg viewBox="0 0 469 422" xmlns="http://www.w3.org/2000/svg"><svg x="26.5" y="0" width="416" height="422" viewBox="1709 110 416 422" overflow="hidden"><image href="assets/process%20illustration.png" width="2172" height="724"/></svg></svg></div><h3>5. Launch</h3><p>Once the work is live, I ask the client for a review and note anything that needs a final adjustment.</p></article>
       </div>
     </section>
-    <div class="cta"><h2><a href="contact.html">Let’s make<br>something →</a></h2><a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></div>
+      <div class="cta"><h2>Have a project in mind?</h2><a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></div>
+      <footer class="case-footer">
+        <a href="index.html">Nsubuga John Paul</a>
+        <nav aria-label="Social profiles">
+          <span>Instagram /</span>
+          <span>LinkedIn /</span>
+          <span>X /</span>
+          <a href="mailto:hello@nsubugajp.com">Email</a>
+        </nav>
+        <p>© 2025</p>
+      </footer>
   </main>
 </body>
 </html>
