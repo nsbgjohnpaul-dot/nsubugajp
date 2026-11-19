@@ -36,8 +36,6 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 .idea-character-field span { position:absolute; display:block; text-align:center; transform:translate(-50%,-50%); }
 .page-idea .audio-reference-control { width:8px; height:9px; object-fit:contain; }
 .page-idea .audio-reference-wave { width:34px; height:9px; object-fit:contain; }
-.idea-project h2 { font-family:var(--font-body); font-weight:700; letter-spacing:0; line-height:.9; color:var(--ink); }
-.idea-project h2 span { font-weight:600; }
 .idea-project .eyebrow { text-transform:none; color:#b8b5ad; font-weight:600; letter-spacing:0; }
 @media (min-width:801px) {
   body.page-idea { height:100svh; overflow-y:hidden; }
@@ -61,34 +59,32 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
   .page-idea .idea-main .idea-board { margin:1.1458333vw 0 0 16.3541667vw; }
   .page-idea .idea-project { position:absolute; left:65.625vw; top:13.5416667vw; width:26.0416667vw; }
   .page-idea .idea-project .eyebrow { font-size:.78125vw; line-height:1.1979167vw; margin-bottom:.2604167vw; }
-  .page-idea .idea-project h2 { font-size:2.9166667vw; white-space:nowrap; }
-  .page-idea .idea-project-description { position:relative; left:-.2083333vw; font-size:1.25vw; line-height:1.35; margin-top:.65625vw; }
   body.page-idea > footer { padding-inline:7.0833333vw; }
   body.page-idea .frame-signature { font-size:.7291667vw; line-height:1.3; font-weight:600; }
 }
 @media (max-width:800px) {
   .page-idea .idea-project { margin:2rem 0 0; }
   .page-idea .idea-project .eyebrow { font-size:13px; margin-bottom:.5rem; }
-  .page-idea .idea-project h2 { font-size:clamp(1.6rem,6vw,2.5rem); }
-  .page-idea .idea-project-description { font-size:16px; margin-top:.75rem; }
 }
 @media (min-width:801px) { body.page-idea .frame-signature { font-size:.78125vw; line-height:1.25; font-weight:700; } }
-/* Use the Contact page's type hierarchy for Idea Box. */
-.page-idea .idea-main .idea-heading h1,
-.page-idea .idea-project h2 {
-  font-family:var(--font-body);
+.page-idea .idea-main .idea-heading h1 {
   font-size:clamp(2.5rem,2.5vw,3rem);
   font-weight:700;
   line-height:.88;
-  letter-spacing:0;
-  white-space:normal;
 }
+
 .page-idea .idea-heading p { font-size:1rem; line-height:1.45; }
-.page-idea .idea-project-description { font-size:clamp(1.06rem,2vw,1.6rem); line-height:1.45; }
-.page-idea .idea-project .eyebrow { font-size:.75rem; line-height:1.55; }
+.page-idea .idea-project-description {
+  font:inherit;
+  font-size:1rem;
+  line-height:1.45;
+}
+
+.page-idea .idea-project h2 { color:var(--ink); white-space:normal; }
+.page-idea .idea-project-description { margin-top:.35rem; }
+
 @media (max-width:800px) {
-  .page-idea .idea-main .idea-heading h1,
-  .page-idea .idea-project h2 { font-size:min(9vw,6svh); line-height:1; }
+  .page-idea .idea-main .idea-heading h1 { font-size:min(9vw,6svh); line-height:1; }
   .page-idea .idea-heading p,
   .page-idea .idea-project-description { font-size:.8rem; }
 }

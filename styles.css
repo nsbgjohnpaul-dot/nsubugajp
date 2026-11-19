@@ -79,7 +79,8 @@ h3 { font-size: clamp(1.4rem, 2.5vw, 2.2rem); }
   width: 100%;
   max-width: 34rem;
 }
-.contact h1 {
+.contact h1,
+.page-idea .idea-project h2 {
   font-size: clamp(2.5rem, 2.5vw, 3rem);
   font-weight: 600;
   line-height: .88;
@@ -1049,7 +1050,8 @@ body.page-contact .contact-copy { transform: none; padding: 0; gap: 1rem; }
   .page-contact .contact { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; gap: .75rem; }
   .page-contact .contact .art { grid-column: 1; grid-row: 1; }
   .page-contact .contact-copy { grid-column: 1; grid-row: 2; gap: .65rem; }
-  .page-contact .contact h1 { font-size: min(9vw, 6svh); line-height: 1; }
+  .page-contact .contact h1,
+  .page-idea .idea-project h2 { font-size: min(9vw, 6svh); line-height: 1; }
   .page-contact .contact-copy > p { font-size: .8rem; }
   .about-main {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
