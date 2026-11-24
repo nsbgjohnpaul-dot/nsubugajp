@@ -1,13 +1,14 @@
 :root {
   color-scheme: light;
-  --paper: #fff;
-  --ink: #000;
-  --muted: #55534f;
-  --line: #c4c0b9;
+  --paper: #ffffff;
+  --ink: #000000;
+  --muted: var(--ink);
+  --line: var(--ink);
   --gutter: clamp(1.5rem, 4.8vw, 5rem);
   --space: clamp(1.5rem, 4vw, 4rem);
-  --font-body: "Mozilla Text", Arial, sans-serif;
-  --font-headline: "Mozilla Headline", "Mozilla Text", Arial, sans-serif;
+  --font-body: "Geist", Arial, sans-serif;
+  --font-headline: var(--font-body);
+  --font-mono: "Geist Mono", ui-monospace, monospace;
   font-family: var(--font-body);
 }
 * { box-sizing: border-box; }
@@ -30,7 +31,7 @@ h1, h2, h3 {
 h1 { font-size: clamp(3rem, 7.1vw, 9rem); }
 h2 { font-size: clamp(2rem, 4.8vw, 5rem); }
 h3 { font-size: clamp(1.4rem, 2.5vw, 2.2rem); }
-.eyebrow { font-size: .75rem; text-transform: uppercase; letter-spacing: .02em; line-height: 1.55; }
+.eyebrow { font-family: var(--font-mono); font-size: .75rem; text-transform: uppercase; letter-spacing: .02em; line-height: 1.55; }
 .lede { max-width: 34rem; margin-block: 1.5rem; font-size: 1.125rem; }
 .action { font-size: clamp(1.06rem, 2vw, 1.6rem); }
 .site-header { display: grid; grid-template-columns: 1.2fr 1fr 1fr auto; align-items: center; gap: 1rem; min-height: 7.5rem; font-size: .8rem; }
@@ -293,7 +294,7 @@ body > :not(.skip) { position: relative; z-index: 1; }
   right: calc(-1 * var(--gutter));
   bottom: clamp(-3rem, calc(15.1svh - 7.7rem), 1rem);
   width: auto;
-  color: #b6b3aa;
+  color: var(--muted);
   font-size: clamp(6.5rem, 12.4vw, 15rem);
   font-weight: 400;
   line-height: .78;
@@ -331,7 +332,7 @@ body > :not(.skip) { position: relative; z-index: 1; }
 .work-piece--body img { aspect-ratio: 1.82; object-position: center top; }
 .work-piece--body h1 {
   margin-top: 5.3vw;
-  color: #ed5538;
+  color: var(--ink);
   font-size: clamp(1.1rem, 1.55vw, 1.8rem);
   letter-spacing: -.03em;
 }
@@ -378,7 +379,7 @@ body > :not(.skip) { position: relative; z-index: 1; }
 }
 .about-intro h1,
 .about-statement h2 {
-  color: #f04b2b;
+  color: var(--ink);
   font-size: clamp(1.35rem, 2.3vw, 2.65rem);
   font-weight: 700;
   line-height: 1.08;
@@ -423,7 +424,7 @@ body > :not(.skip) { position: relative; z-index: 1; }
 }
 .about-statement .eyebrow {
   margin-bottom: 2.35rem;
-  color: #f04b2b;
+  color: var(--ink);
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
@@ -458,7 +459,7 @@ body > :not(.skip) { position: relative; z-index: 1; }
   z-index: 0;
   right: -1%;
   bottom: -.21em;
-  color: #d3d1ca;
+  color: color-mix(in srgb, var(--ink) 20%, transparent);
   font-size: clamp(9rem, 32vw, 30rem);
   font-weight: 500;
   line-height: .72;
@@ -810,7 +811,7 @@ body.page-contact .contact-copy { transform: translateY(-3.75rem); }
   font-size: clamp(4rem, 11.2vw, 13.4375rem);
   font-weight: 300;
   letter-spacing: -.035em;
-  color: #a6a399;
+  color: var(--muted);
 }
 .home-meta { bottom: clamp(9rem, 16svh, 12rem); }
 .home .type-art { left: 28.4%; right: auto; }

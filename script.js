@@ -98,40 +98,146 @@ if (ideaBoard) {
     '07': ['Cista', 'A botanical label and bottle study styled with natural materials.'],
     '08': ['Catpuccino', 'A playful café website concept built around an illustrated cat identity.'],
   };
-  const viewer = ideaBoard.querySelector('[data-artwork-viewer]');
-  const preview = viewer.querySelector('.idea-preview');
-  const details = document.querySelector('.idea-project');
-  const projectName = details.querySelector('h2');
-  const projectDescription = details.querySelector('.idea-project-description');
-  const previewCaption = viewer.querySelector('.idea-preview-caption');
+  const projectList = document.querySelector('.idea-project-list');
   const tiles = ideaBoard.querySelectorAll('.idea-tile');
+  const cube = ideaBoard.querySelector('.idea-cube');
+  const spareTiles = [...ideaBoard.querySelector('.idea-cube-artworks').content.querySelectorAll('.idea-tile')]
+    .map(tile => document.adoptNode(tile));
+  const queue = [...spareTiles];
+  const faceAngles = [[0, 0], [0, -90], [0, 180], [0, 90], [-90, 0], [90, 0]];
+  const inquiry = document.querySelector('.header-inquiry');
+  const alignProjectList = () => {
+    const right = document.documentElement.clientWidth - inquiry.getBoundingClientRect().right;
+    projectList.closest('aside').style.setProperty('--idea-list-right', Math.max(0, right) + 'px');
+  };
+  new ResizeObserver(alignProjectList).observe(inquiry);
+  window.addEventListener('resize', alignProjectList);
+  alignProjectList();
+  let selectionAnimation;
+  let resumeTimer;
+  const projectButtons = new Map();
+  let activeProject;
 
-  function showProject(tile) {
-    const [name, description] = projects[tile.dataset.artwork];
-    projectName.textContent = name;
-    projectDescription.textContent = description;
+  function highlightProject(button) {
+    if (!button || activeProject === button) return;
+    activeProject?.removeAttribute('data-highlighted');
+    button.setAttribute('data-highlighted', '');
+    activeProject = button;
+
+    if (!matchMedia('(min-width: 801px)').matches) return;
+    const column = projectList.closest('aside');
+    const bounds = column.getBoundingClientRect();
+    const title = button.getBoundingClientRect();
+    if (column.scrollHeight > column.clientHeight) {
+      column.scrollTo({
+        top: column.scrollTop + title.top - bounds.top - (column.clientHeight - title.height) / 2,
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      });
+    }
   }
 
-  tiles.forEach(tile => {
-    const artwork = tile.querySelector('img');
-    const [name, description] = projects[tile.dataset.artwork];
-    tile.setAttribute('aria-label', 'View ' + name);
-    tile.addEventListener('pointerenter', () => showProject(tile));
-    tile.addEventListener('focus', () => showProject(tile));
-    tile.addEventListener('click', () => {
-      showProject(tile);
-      preview.src = artwork.dataset.previewSrc || artwork.src;
-      preview.alt = artwork.alt;
-      previewCaption.querySelector('strong').textContent = name;
-      previewCaption.querySelector('p').textContent = description;
-      viewer.showModal();
-    });
-  });
+  if (cube) {
+    const faces = [
+      ['front', matrix => matrix.m33],
+      ['right', matrix => matrix.m13],
+      ['back', matrix => -matrix.m33],
+      ['left', matrix => -matrix.m13],
+      ['top', matrix => -matrix.m23],
+      ['bottom', matrix => matrix.m23],
+    ].map(([side, depth]) => ({
+      element: cube.querySelector('.idea-cube-face--' + side),
+      depth,
+      wasVisible: false,
+    }));
+    setInterval(() => {
+      if (document.hidden || !queue.length || cube.contains(document.activeElement)) return;
+      const style = getComputedStyle(cube);
+      if (style.animationPlayState !== 'running' || style.animationName === 'none') return;
 
-  showProject(tiles[0]);
-  viewer.addEventListener('close', () => {
-    preview.removeAttribute('src');
-    preview.alt = '';
+      const rotation = new DOMMatrixReadOnly(style.transform);
+      let facingArtwork;
+      let facingDepth = .72;
+      faces.forEach(face => {
+        const depth = face.depth(rotation);
+        if (depth > facingDepth) {
+          facingDepth = depth;
+          facingArtwork = face.element.firstElementChild.dataset.artwork;
+        }
+        if (depth > .35) face.wasVisible = true;
+        if (depth > -.35 || !face.wasVisible) return;
+
+        // Swap only after an outward-facing artwork has turned fully away.
+        const outgoing = face.element.firstElementChild;
+        face.element.replaceChildren(queue.shift());
+        queue.push(outgoing);
+        face.wasVisible = false;
+      });
+      highlightProject(projectButtons.get(facingArtwork));
+    }, 120);
+  }
+
+  const allTiles = [...tiles, ...spareTiles].sort((a, b) => a.dataset.artwork.localeCompare(b.dataset.artwork));
+  const editions = { '01': 'Smoke Study', '03': 'Label Detail', '05': 'Studio Light', '06': 'Label Study', '07': 'Bottle Study' };
+
+  allTiles.concat(allTiles.slice(0, 4)).forEach((tile, index) => {
+    const id = tile.dataset.artwork;
+    const [name] = projects[id];
+    const label = editions[id] ? name + ' · ' + editions[id] : name;
+    const item = document.createElement('li');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = name;
+    if (editions[id]) {
+      const edition = document.createElement('small');
+      edition.textContent = editions[id];
+      button.append(' ', edition);
+    }
+    item.append(button);
+    projectList.append(item);
+    if (!projectButtons.has(id)) projectButtons.set(id, button);
+
+    function turnToArtwork() {
+      highlightProject(button);
+      const from = getComputedStyle(cube).transform;
+      clearTimeout(resumeTimer);
+      selectionAnimation?.cancel();
+
+      const faces = [...cube.children];
+      let faceIndex = faces.indexOf(tile.parentElement);
+      if (faceIndex === -1) {
+        const front = faces[0];
+        queue.splice(queue.indexOf(tile), 1, front.firstElementChild);
+        front.replaceChildren(tile);
+        faceIndex = 0;
+      }
+
+      const [x, y] = faceAngles[faceIndex];
+      cube.setAttribute('data-selecting', '');
+      cube.style.setProperty('--cube-x', x + 'deg');
+      cube.style.setProperty('--cube-y', y + 'deg');
+      cube.style.setProperty('--cube-z', '0deg');
+      const to = 'rotateX(' + x + 'deg) rotateY(' + y + 'deg) rotateZ(0deg)';
+      const duration = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 750;
+      selectionAnimation = cube.animate([{ transform: from }, { transform: to }], {
+        duration,
+        easing: 'ease-in-out',
+        fill: 'forwards',
+      });
+      selectionAnimation.onfinish = () => {
+        resumeTimer = setTimeout(() => {
+          selectionAnimation.cancel();
+          cube.removeAttribute('data-selecting');
+        }, 2200);
+      };
+    }
+
+    if (index < allTiles.length) {
+      tile.setAttribute('aria-label', 'View ' + label);
+      tile.addEventListener('pointerenter', () => highlightProject(button));
+      tile.addEventListener('focus', () => highlightProject(button));
+      tile.addEventListener('click', turnToArtwork);
+    }
+    button.addEventListener('click', turnToArtwork);
   });
 }
 
@@ -193,38 +299,4 @@ if (homeProjects) {
       incoming.classList.remove('is-entering');
     };
   }, 3600);
-}
-
-const mobilePageOrder = [
-  'index.html', 'work.html', 'project-01.html', 'body-and-soil.html',
-  'project-03.html', '27-guns-pop-beer.html', 'project-04.html', 'project-05.html', 'project-06.html',
-  'project-07.html', 'project-08.html', 'project-09.html', 'project-10.html',
-  'project-11.html', 'project-12.html', 'project-13.html', 'project-14.html',
-  'project-15.html', 'about.html', 'idea-box.html', 'contact.html',
-];
-if (matchMedia('(max-width: 800px)').matches) {
-  let swipeStart = null;
-  document.addEventListener('touchstart', event => {
-    if (event.touches.length !== 1) { swipeStart = null; return; }
-    const target = event.target instanceof Element ? event.target : null;
-    if (target?.closest('a, button, input, textarea, select, [contenteditable="true"], .work-gallery, .idea-board')) {
-      swipeStart = null;
-      return;
-    }
-    const touch = event.touches[0];
-    swipeStart = { x: touch.clientX, y: touch.clientY };
-  }, { passive: true });
-  document.addEventListener('touchend', event => {
-    if (!swipeStart || !matchMedia('(max-width: 800px)').matches) return;
-    const touch = event.changedTouches[0];
-    const dx = touch.clientX - swipeStart.x;
-    const dy = touch.clientY - swipeStart.y;
-    swipeStart = null;
-    if (Math.abs(dx) < 72 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
-    const current = location.pathname.split('/').pop() || 'index.html';
-    const index = mobilePageOrder.indexOf(current);
-    const next = mobilePageOrder[index + (dx < 0 ? 1 : -1)];
-    if (index >= 0 && next) location.assign(new URL(next, location.href));
-  }, { passive: true });
-  document.addEventListener('touchcancel', () => { swipeStart = null; }, { passive: true });
 }

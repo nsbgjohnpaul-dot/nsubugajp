@@ -5,19 +5,19 @@ body.page-idea { --header-space:8.4895833vw; }
 body.page-case { --header-space:clamp(9rem,10vw,12rem); }
 body[class] > header.site-header.wrap { position:fixed; z-index:20; inset:0 0 auto; display:block; width:100%; max-width:none; height:145px; min-height:0; max-height:none; padding:0; margin:0; flex:none; pointer-events:none; }
 body[class] > .site-header > * { pointer-events:auto; }
-body[class] > .site-header .audio-indicator { position:absolute; left:5.4166667vw; top:clamp(1.75rem,2.8645833vw,3.4375rem); display:flex; align-items:center; gap:5px; padding:0; border:0; width:auto; text-align:left; font:600 clamp(10px,.7291667vw,14px)/23px var(--font-body); color:#a6a399; background:none; cursor:pointer; }
+body[class] > .site-header .audio-indicator { position:absolute; left:5.4166667vw; top:clamp(1.75rem,2.8645833vw,3.4375rem); display:flex; align-items:center; gap:5px; padding:0; border:0; width:auto; text-align:left; font:600 clamp(10px,.7291667vw,14px)/23px var(--font-body); color:var(--muted); background:none; cursor:pointer; }
 body[class] > .site-header .audio-indicator > .audio-label { width:auto; margin-right:0; }
 body[class] > .site-header .audio-reference-control { width:8px; height:9px; object-fit:contain; margin-right:4px; }
 body[class] > .site-header .audio-reference-wave { width:34px; height:9px; object-fit:contain; }
-body[class] > .site-header .audio-play { width:8px; height:9px; margin-right:4px; background:#161615; clip-path:polygon(0 0,100% 50%,0 100%); }
+body[class] > .site-header .audio-play { width:8px; height:9px; margin-right:4px; background:var(--ink); clip-path:polygon(0 0,100% 50%,0 100%); }
 body[class] > .site-header .audio-indicator [hidden] { display:none; }
 body[class] > .site-header nav { position:absolute; left:16.25vw; top:clamp(1.75rem,2.8645833vw,3.4375rem); display:block; width:max-content; margin:0; font:700 clamp(10px,.6770833vw,13px)/23px var(--font-body); text-transform:uppercase; }
-body[class] > .site-header .menu-label { display:block; margin:0 0 3px; color:#b8b5ad; font:600 clamp(11px,.7291667vw,14px)/23px var(--font-body); text-transform:none; }
+body[class] > .site-header .menu-label { display:block; margin:0 0 3px; color:var(--muted); font:600 clamp(11px,.7291667vw,14px)/23px var(--font-body); text-transform:none; }
 body[class] > .site-header nav a { display:block; position:relative; margin:0 0 0 1px; padding:0; height:15px; line-height:23px; transform:none; white-space:nowrap; }
 body[class] > .site-header nav a[aria-current] { padding-left:16px; }
 body[class] > .site-header nav a[aria-current]::before { position:absolute; left:0; content:'\2192'; font-weight:400; }
 body[class] > .site-header .header-location { position:absolute; left:47.5520833vw; top:calc(clamp(1.75rem,2.8645833vw,3.4375rem) + 5px); padding:0; text-align:left; font:600 clamp(11px,.78125vw,15px)/normal var(--font-body); }
-body[class] > .site-header .clock { position:static; display:block; margin:8px 0 0; color:#b3aea9; font:600 clamp(10px,.7291667vw,14px)/normal var(--font-body); white-space:nowrap; }
+body[class] > .site-header .clock { position:static; display:block; margin:8px 0 0; color:var(--muted); font:600 clamp(10px,.7291667vw,14px)/normal var(--font-body); white-space:nowrap; }
 body[class] > .site-header .header-inquiry { position:absolute; left:80.9375vw; top:calc(clamp(1.75rem,2.8645833vw,3.4375rem) + 3px); padding:0; margin:0; font:300 clamp(10px,.7291667vw,14px)/normal var(--font-body); white-space:nowrap; }
 body[class] > .site-header .header-inquiry a { font-weight:600; text-decoration:underline; }
 /* Align the site signature and About's process link to one shared baseline. */
@@ -94,7 +94,7 @@ body[class] > .site-header .header-inquiry { left:auto; right:5.4166667vw; text-
   body[class] > .site-header nav a[aria-current] { padding-left:0; }
   body[class] > .site-header nav a[aria-current]::before { content:none; }
   body[class] > .site-header .header-location { left:auto; right:6.1538462vw; top:18px; padding:0; text-align:right; font-size:12px; line-height:normal; }
-  body[class] > .site-header .clock { position:static; margin:0; font-size:12px; font-weight:500; line-height:1.35; color:#66635c; }
+  body[class] > .site-header .clock { position:static; margin:0; font-size:12px; font-weight:500; line-height:1.35; color:var(--muted); }
   body[class] > .site-header .header-inquiry { display:none; }
 }
 body[class] > header.site-header.wrap { width:100vw; }

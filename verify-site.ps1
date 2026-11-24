@@ -126,7 +126,8 @@ try {
   $null=Cdp 'Emulation.setEmulatedMedia' @{features=@(@{name='prefers-reduced-motion';value='reduce'})}
   Assert (Js '!!document.querySelector(".sound-icon")') 'Sound control remains available with reduced motion enabled'
   Visit 'contact.html'
-  Assert (Js '!document.querySelector(".contact .particles") && !!document.querySelector(".contact .type-art")') 'Contact keeps the word cloud without its particle vector'
+  Assert (Js 'document.querySelector(".contact-stamp img").naturalWidth > 0 && getComputedStyle(document.querySelector(".contact-stamp")).clipPath.includes("#contact-postcard-cutout")') 'Contact portrait uses the postcard cutout'
+  Assert (Js 'document.querySelector(".contact-letter").action === "mailto:hello@nsubugajp.com" && document.querySelector(".contact-message").required') 'Contact letter opens an email draft and requires a message'
   $allPages=Get-ChildItem -LiteralPath $Root -Filter '*.html' -File
   foreach($localPage in $allPages) {
     $markup=[IO.File]::ReadAllText($localPage.FullName)

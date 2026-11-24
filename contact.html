@@ -6,7 +6,7 @@
   <title>Contact | Nsubuga John Paul</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@300;400;500;600;700&family=Mozilla+Text:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
   <link rel="stylesheet" href="shared-ui.css">
@@ -14,6 +14,8 @@
   <script src="about-background.js" defer></script>
   <script src="about-interaction.js" defer></script>
   <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="contact.css">
+  <script src="contact-music.js" defer></script>
 </head>
 <body class="page-contact">
   <a class="skip" href="#main">Skip to content</a>
@@ -35,19 +37,185 @@
     <p class="header-inquiry">For Inquiries <a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></p>
   </header>
   <main id="main" class="wrap">
-    <section class="contact">
-      <div class="art" aria-hidden="true"><img class="type-art" src="assets/typography-art.webp" alt=""></div>
-      <div class="contact-copy">
-        <p class="eyebrow">Contact</p>
-        <h1>Let’s make<br>something</h1>
-        <p class="action"><a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></p>
-        <p>For new projects, collaborations,<br>or just a good conversation.</p>
+    <section class="contact-card" aria-labelledby="contact-name">
+      <div class="contact-stamp">
+        <svg width="0" height="0" aria-hidden="true" focusable="false">
+          <clipPath id="contact-postcard-cutout" clipPathUnits="objectBoundingBox">
+            <path transform="scale(0.002939814769 -0.002351851463) translate(-127.55904 -633.54336)" d="
+              M127.55904 633.54336
+              L150.51969 633.54336
+              C150.51969 627.43777 155.46923 622.48818 161.5748 622.48818
+              C167.68038 622.48818 172.62992 627.43777 172.62992 633.54336
+              L184.53543 633.54336
+              C184.53543 627.43777 189.48497 622.48818 195.59055 622.48818
+              C201.69612 622.48818 206.64566 627.43777 206.64566 633.54336
+              L218.55118 633.54336
+              C218.55118 627.43777 223.50072 622.48818 229.6063 622.48818
+              C235.71187 622.48818 240.6614 627.43777 240.6614 633.54336
+              L252.56693 633.54336
+              C252.56693 627.43777 257.51649 622.48818 263.62205 622.48818
+              C269.7276 622.48818 274.67716 627.43777 274.67716 633.54336
+              L286.58268 633.54336
+              C286.58268 627.43777 291.53224 622.48818 297.6378 622.48818
+              C303.74336 622.48818 308.6929 627.43777 308.6929 633.54336
+              L320.59843 633.54336
+              C320.59843 627.43777 325.54798 622.48818 331.65354 622.48818
+              C337.7591 622.48818 342.70866 627.43777 342.70866 633.54336
+              L354.61418 633.54336
+              C354.61418 627.43777 359.56373 622.48818 365.66929 622.48818
+              C371.77485 622.48818 376.7244 627.43777 376.7244 633.54336
+              L388.6299 633.54336
+              C388.6299 627.43777 393.57948 622.48818 399.68504 622.48818
+              C405.79063 622.48818 410.74015 627.43777 410.74015 633.54336
+              L422.64567 633.54336
+              C422.64567 627.43777 427.5952 622.48818 433.70079 622.48818
+              C439.80638 622.48818 444.7559 627.43777 444.7559 633.54336
+              L467.71653 633.54336
+              L467.71653 619.0866
+              C461.61097 619.0866 456.6614 614.1371 456.6614 608.0315
+              C456.6614 601.9259 461.61097 596.9764 467.71653 596.9764
+              L467.71653 585.07089
+              C461.61097 585.07089 456.6614 580.12136 456.6614 574.01577
+              C456.6614 567.91018 461.61097 562.96066 467.71653 562.96066
+              L467.71653 551.0551
+              C461.61097 551.0551 456.6614 546.1056 456.6614 540
+              C456.6614 533.8944 461.61097 528.9449 467.71653 528.9449
+              L467.71653 517.03939
+              C461.61097 517.03939 456.6614 512.08987 456.6614 505.98426
+              C456.6614 499.8787 461.61097 494.92915 467.71653 494.92915
+              L467.71653 483.02363
+              C461.61097 483.02363 456.6614 478.07408 456.6614 471.9685
+              C456.6614 465.86296 461.61097 460.9134 467.71653 460.9134
+              L467.71653 449.00788
+              C461.61097 449.00788 456.6614 444.05833 456.6614 437.95277
+              C456.6614 431.8472 461.61097 426.89765 467.71653 426.89765
+              L467.71653 414.99214
+              C461.61097 414.99214 456.6614 410.04258 456.6614 403.937
+              C456.6614 397.83146 461.61097 392.8819 467.71653 392.8819
+              L467.71653 380.97639
+              C461.61097 380.97639 456.6614 376.02684 456.6614 369.92127
+              C456.6614 363.8157 461.61097 358.86616 467.71653 358.86616
+              L467.71653 346.96064
+              C461.61097 346.96064 456.6614 342.01109 456.6614 335.90553
+              C456.6614 329.79994 461.61097 324.8504 467.71653 324.8504
+              L467.71653 312.9449
+              C461.61097 312.9449 456.6614 307.99537 456.6614 301.88978
+              C456.6614 295.78419 461.61097 290.83467 467.71653 290.83467
+              L467.71653 278.92915
+              C461.61097 278.92915 456.6614 273.9796 456.6614 267.87403
+              C456.6614 261.76844 461.61097 256.8189 467.71653 256.8189
+              L467.71653 244.91339
+              C461.61097 244.91339 456.6614 239.96387 456.6614 233.85828
+              C456.6614 227.75269 461.61097 222.80316 467.71653 222.80316
+              L467.71653 208.34644
+              L444.7559 208.34644
+              C444.7559 214.45203 439.80638 219.40155 433.70079 219.40155
+              C427.5952 219.40155 422.64567 214.45203 422.64567 208.34644
+              L410.74015 208.34644
+              C410.74015 214.45203 405.79063 219.40155 399.68504 219.40155
+              C393.57948 219.40155 388.6299 214.45203 388.6299 208.34644
+              L376.7244 208.34644
+              C376.7244 214.45203 371.77485 219.40155 365.66929 219.40155
+              C359.56373 219.40155 354.61418 214.45203 354.61418 208.34644
+              L342.70866 208.34644
+              C342.70866 214.45203 337.7591 219.40155 331.65354 219.40155
+              C325.54798 219.40155 320.59843 214.45203 320.59843 208.34644
+              L308.6929 208.34644
+              C308.6929 214.45203 303.74336 219.40155 297.6378 219.40155
+              C291.53224 219.40155 286.58268 214.45203 286.58268 208.34644
+              L274.67716 208.34644
+              C274.67716 214.45203 269.7276 219.40155 263.62205 219.40155
+              C257.51649 219.40155 252.56693 214.45203 252.56693 208.34644
+              L240.6614 208.34644
+              C240.6614 214.45203 235.71187 219.40155 229.6063 219.40155
+              C223.50072 219.40155 218.55118 214.45203 218.55118 208.34644
+              L206.64566 208.34644
+              C206.64566 214.45203 201.69612 219.40155 195.59055 219.40155
+              C189.48497 219.40155 184.53543 214.45203 184.53543 208.34644
+              L172.62992 208.34644
+              C172.62992 214.45203 167.68038 219.40155 161.5748 219.40155
+              C155.46923 219.40155 150.51969 214.45203 150.51969 208.34644
+              L127.55904 208.34644
+              L127.55904 222.80316
+              C133.66463 222.80316 138.61417 227.75269 138.61417 233.85828
+              C138.61417 239.96387 133.66463 244.91339 127.55904 244.91339
+              L127.55904 256.8189
+              C133.66463 256.8189 138.61417 261.76844 138.61417 267.87403
+              C138.61417 273.9796 133.66463 278.92915 127.55904 278.92915
+              L127.55904 290.83467
+              C133.66463 290.83467 138.61417 295.78419 138.61417 301.88978
+              C138.61417 307.99537 133.66463 312.9449 127.55904 312.9449
+              L127.55904 324.8504
+              C133.66463 324.8504 138.61417 329.79994 138.61417 335.90553
+              C138.61417 342.01109 133.66463 346.96064 127.55904 346.96064
+              L127.55904 358.86616
+              C133.66463 358.86616 138.61417 363.8157 138.61417 369.92127
+              C138.61417 376.02684 133.66463 380.97639 127.55904 380.97639
+              L127.55904 392.8819
+              C133.66463 392.8819 138.61417 397.83146 138.61417 403.937
+              C138.61417 410.04258 133.66463 414.99214 127.55904 414.99214
+              L127.55904 426.89765
+              C133.66463 426.89765 138.61417 431.8472 138.61417 437.95277
+              C138.61417 444.05833 133.66463 449.00788 127.55904 449.00788
+              L127.55904 460.9134
+              C133.66463 460.9134 138.61417 465.86296 138.61417 471.9685
+              C138.61417 478.07408 133.66463 483.02363 127.55904 483.02363
+              L127.55904 494.92915
+              C133.66463 494.92915 138.61417 499.8787 138.61417 505.98426
+              C138.61417 512.08987 133.66463 517.03939 127.55904 517.03939
+              L127.55904 528.9449
+              C133.66463 528.9449 138.61417 533.8944 138.61417 540
+              C138.61417 546.1056 133.66463 551.0551 127.55904 551.0551
+              L127.55904 562.96066
+              C133.66463 562.96066 138.61417 567.91018 138.61417 574.01577
+              C138.61417 580.12136 133.66463 585.07089 127.55904 585.07089
+              L127.55904 596.9764
+              C133.66463 596.9764 138.61417 601.9259 138.61417 608.0315
+              C138.61417 614.1371 133.66463 619.0866 127.55904 619.0866
+              L127.55904 633.54336
+              Z"/>
+          </clipPath>
+        </svg>
+        <img src="assets/portrait.webp" alt="Portrait of Nsubuga John Paul">
       </div>
+      <form class="contact-letter" action="mailto:hello@nsubugajp.com" method="post" enctype="text/plain">
+        <h1 id="contact-name">Nsubuga John Paul</h1>
+        <p class="contact-role">Artist, Independent Designer &amp; Creative Director</p>
+        <time class="contact-date" datetime="2026-11-24">24 Nov 2026</time>
+        <p class="contact-greeting">Dear John Paul,</p>
+        <label class="contact-field contact-subject">
+          RE: <input name="subject" placeholder="New business, A collaboration or Just a hello.">
+        </label>
+        <p class="contact-field contact-recipient">To: <a href="mailto:hello@nsubugajp.com">hello@nsubuga.design</a></p>
+        <label class="contact-field contact-sender">
+          From: <input name="email" type="email" autocomplete="email" placeholder="you@xxxxxxx.com">
+        </label>
+        <textarea class="contact-message" name="message" aria-label="Your message" required></textarea>
+        <p class="contact-signoff">Regards,</p>
+        <button class="contact-send" type="submit">Send it.</button>
+      </form>
     </section>
+    <script>
+      document.querySelector('.contact-letter').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const letter = event.currentTarget;
+        const { subject, email, message } = letter.elements;
+        const body = `Dear John Paul,\r\n\r\n${message.value}\r\n\r\nRegards,\r\n${email.value}`;
+        window.location.href = `${letter.action}?subject=${encodeURIComponent(subject.value)}&body=${encodeURIComponent(body)}`;
+      });
+    </script>
   </main>
   <footer>
-    <span class="frame-signature">Nsubuga John Paul</span>
-    <p class="frame-copyright">© 2025</p>
+    <a class="frame-signature" href="index.html">Nsubuga John Paul</a>
   </footer>
+  <button class="contact-music" type="button" popovertarget="contact-music-player" aria-label="Open Studio Vybz player" data-developer-token="">
+    <img class="contact-music-rest" src="assets/contact-vinyl-rest.png" width="1122" height="1402" alt="">
+    <img class="contact-music-playing" src="assets/contact-vinyl.png" width="165" height="206" alt="">
+    <span class="contact-music-platter" aria-hidden="true"><span></span></span>
+  </button>
+  <section id="contact-music-player" class="contact-music-player" popover aria-label="Studio Vybz player">
+    <button type="button" popovertarget="contact-music-player" popovertargetaction="hide">Close</button>
+    <iframe title="Studio Vybz on Apple Music" data-src="https://embed.music.apple.com/ug/playlist/studio-vybz/pl.u-WabZvd3CRr40jYo?autoplay=1" allow="autoplay *; encrypted-media *"></iframe>
+  </section>
 </body>
 </html>

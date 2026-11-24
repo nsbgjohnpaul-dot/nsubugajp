@@ -1,0 +1,261 @@
+.page-contact .contact-card {
+  --contact-top-gap: max(0px, calc(22.7539svh - var(--header-space)));
+  align-self: start;
+  display: grid;
+  grid-template-columns: minmax(0, 348fr) minmax(0, 539fr);
+  align-items: start;
+  column-gap: .8%;
+  width: min(50.8854vw, 977px);
+  min-height: min(calc(100% - var(--contact-top-gap)), 26.71875vw, 513px);
+  max-height: calc(100% - var(--contact-top-gap));
+  margin-block-start: var(--contact-top-gap);
+  margin-inline-start: max(0px, calc(15.5729vw - var(--gutter)));
+  padding: min(2.03125vw, 39px) min(2.7604vw, 53px) min(1.25vw, 24px) min(1.5625vw, 30px);
+  overflow: auto;
+  border-radius: 5px;
+  background: var(--card);
+  color: var(--ink);
+}
+
+.contact-stamp {
+  aspect-ratio: 4 / 5;
+  background: #ffffff;
+  clip-path: url("#contact-postcard-cutout");
+}
+
+.contact-stamp svg { position: absolute; }
+
+.contact-stamp img {
+  width: 100%;
+  height: 100%;
+  object-position: center bottom;
+}
+
+.contact-letter {
+  min-width: 0;
+  padding-inline-start: clamp(0px, 1.5625vw, 30px);
+  container-type: inline-size;
+  font-size: .9375rem;
+}
+
+.contact-letter h1 {
+  font-size: clamp(1.5rem, 6.9cqi, 2.1875rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
+
+.contact-role {
+  max-width: 311px;
+  line-height: 1.25;
+}
+
+.contact-date {
+  display: block;
+  margin-top: 18px;
+  line-height: 42px;
+}
+
+.contact-greeting { margin-block: 0 10px; line-height: 23px; }
+.contact-field {
+  display: flex;
+  align-items: center;
+  gap: .35em;
+  min-height: 30px;
+  background: url("assets/contact-rule-to.svg") left bottom / 100% 1px no-repeat;
+}
+
+.contact-subject { min-height: 25px; }
+.contact-sender { min-height: 31px; }
+.contact-recipient a { text-decoration: none; }
+.contact-recipient a:hover { text-decoration: underline; }
+
+.contact-letter input,
+.contact-message {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.contact-letter input { flex: 1; min-height: 22px; }
+.contact-letter :is(input, textarea):focus {
+  outline: none;
+}
+
+.contact-letter :is(input, textarea):focus-visible {
+  background-color: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.contact-date,
+.contact-subject input::placeholder,
+.contact-sender input::placeholder {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  opacity: 1;
+}
+.contact-message {
+  display: block;
+  width: 100%;
+  height: 111px;
+  padding-top: 10px;
+  background:
+    url("assets/contact-rule-to.svg") left 34px / 100% 1px no-repeat,
+    url("assets/contact-rule-to.svg") left 59px / 100% 1px no-repeat,
+    url("assets/contact-rule-to.svg") left 84px / 100% 1px no-repeat,
+    url("assets/contact-rule-to.svg") left bottom / 100% 1px no-repeat;
+  line-height: 25px;
+  resize: none;
+}
+
+.contact-signoff { margin-top: clamp(8px, 2.45cqi, 13px); }
+.contact-send {
+  display: block;
+  margin: .15rem 0 0 auto;
+  border: 0;
+  padding: .2rem .3rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.contact-music {
+  --record-width: clamp(4rem, 8.594vw, 10.3125rem);
+  position: fixed;
+  z-index: 6;
+  left: calc(94.48vw - var(--record-width));
+  bottom: 6.15svh;
+  width: var(--record-width);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.contact-music-player {
+  color-scheme: light;
+  position: fixed;
+  inset: auto 5.52vw calc(6.15svh + clamp(5rem, 10.73vw, 12.9rem)) auto;
+  width: min(26rem, 89vw);
+  max-height: min(27rem, 65svh);
+  margin: 0;
+  padding: .75rem;
+  border: 1px solid var(--ink);
+  border-radius: .5rem;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.theme-dark .contact-music-player { color-scheme: dark; }
+
+.contact-music-player button {
+  display: block;
+  margin: 0 0 .5rem auto;
+  padding: .25rem .5rem;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.contact-music-player iframe {
+  display: block;
+  width: 100%;
+  height: min(22rem, 53svh);
+  border: 0;
+  color-scheme: inherit;
+  filter: grayscale(1);
+}
+
+.contact-music img { width: 100%; height: auto; }
+.contact-music-playing,
+.contact-music-platter { display: none; position: absolute; inset: 0; }
+.contact-music[data-playing] .contact-music-rest { visibility: hidden; }
+.contact-music[data-playing] :is(.contact-music-playing, .contact-music-platter) { display: block; }
+
+/* Clip the rotating disc below the stationary tonearm. */
+.contact-music-platter {
+  pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 100% 83%, 87% 83%, 83% 79%, 71% 78%, 53% 72%, 38% 66%, 29% 59%, 25% 58%, 21% 60%, 22% 64%, 33% 70%, 51% 77%, 61% 82%, 0 86%);
+}
+
+.contact-music-platter span {
+  position: absolute;
+  top: 7.3%;
+  left: 2.4%;
+  width: 93.9%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: url("assets/contact-vinyl-rest.png") 45.5% 29.2% / 106.25% 132.77% no-repeat;
+}
+
+.contact-music[data-playing] .contact-music-platter span { animation: contact-vinyl-spin 1.8s linear infinite; }
+
+.theme-dark .contact-music-platter { display: block; }
+.theme-dark .contact-music-platter span {
+  background-color: #e0b400;
+  background-blend-mode: screen;
+}
+.theme-dark .contact-music:not([data-playing]) .contact-music-platter { clip-path: none; }
+.theme-dark .contact-music:not([data-playing]) .contact-music-platter span {
+  top: 7.2%;
+  left: 2.67%;
+  width: 94.12%;
+}
+
+@keyframes contact-vinyl-spin {
+  to { transform: rotate(1turn); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-music[data-playing] .contact-music-platter span { animation: none; }
+  body:not(.theme-dark) .contact-music[data-playing] .contact-music-platter { display: none; }
+}
+
+.theme-dark .contact-music img { filter: drop-shadow(0 0 2px #ffffff); }
+
+@media (960px < width <= 1400px) {
+  .contact-date { margin-top: 8px; line-height: 30px; }
+  .contact-greeting { margin-bottom: 5px; }
+  .contact-message {
+    height: 85px;
+    padding-top: 4px;
+    background-position: left 24px, left 44px, left 64px, left bottom;
+    line-height: 20px;
+  }
+}
+
+@media (max-width: 960px) {
+  .page-contact .contact-card {
+    --contact-top-gap: 0px;
+    align-self: start;
+    width: 100%;
+    min-height: 0;
+    max-height: calc(100% - clamp(4rem, 10.73vw, 6.45rem));
+    margin-inline-start: 0;
+    padding: 1rem;
+    column-gap: 5%;
+  }
+
+  .contact-letter { padding-inline-start: 0; font-size: 1rem; }
+
+  .contact-field,
+  .contact-letter input { min-height: 2rem; }
+  .contact-music { --record-width: clamp(3rem, 8.594vw, 5.2rem); bottom: 1rem; }
+  .contact-music-player { bottom: calc(1.5rem + clamp(3.75rem, 10.75vw, 6.5rem)); }
+}
+
+@media (max-width: 480px) {
+  .page-contact .contact-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .75rem;
+  }
+
+  .contact-stamp { width: min(34%, 8rem); }
+}

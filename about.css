@@ -5,23 +5,23 @@ body.page-about .site-header .header-location { grid-column: 3; }
 body.page-about .site-header .header-inquiry { grid-column: 4; }
 body.page-about .about-main { display: grid; flex: none; position: relative; grid-template-columns: 37.5vw 4.583333vw 17.1875vw 1fr; grid-template-rows: 16.510417vw 4.322917vw auto; gap: 0; min-height: 42.552083vw; padding: 0 0 0 4.947917vw; }
 .page-about .about-main .about-intro { display: contents; }
-.page-about .about-main .about-intro h1 { grid-column: 1; grid-row: 1; width: 33.333333vw; align-self: start; font: 700 1.979167vw/1.21 var(--font-body); letter-spacing: 0; color: #ff4000; text-transform: uppercase; margin: 0; }
+.page-about .about-main .about-intro h1 { grid-column: 1; grid-row: 1; width: 33.333333vw; align-self: start; font: 700 1.979167vw/1.21 var(--font-body); letter-spacing: 0; color: var(--ink); text-transform: uppercase; margin: 0; }
 .page-about .about-main .about-intro h1 span { display: block; }
 .page-about .about-main .about-capabilities { grid-column: 3; grid-row: 1 / 3; align-self: start; width: auto; margin: 5.78125vw 0 0; }
 .page-about .about-capabilities .eyebrow,
-.page-about .about-details h2 { font: 600 .78125vw/1.2 var(--font-body); color: #b3b0a8; text-transform: none; letter-spacing: 0; margin: 0 0 .572917vw; }
+.page-about .about-details h2 { font: 600 .78125vw/1.2 var(--font-body); color: var(--muted); text-transform: none; letter-spacing: 0; margin: 0 0 .572917vw; }
 .page-about .about-capabilities ul,
 .page-about .about-details ul { font-size: .9375vw; font-weight: 600; line-height: 1.666667; margin: 0; }
 .page-about .about-capabilities li,
 .page-about .about-details li { margin: 0; line-height: inherit; }
 .page-about .about-main .about-intro img { position: absolute; z-index: 1; left: 61.927083vw; top: -6.71875vw; width: 39.0625vw; height: 49.270833vw; max-height: none; transform: none; object-fit: fill; object-position: bottom; }
 .page-about .about-main .about-statement { display: contents; }
-.page-about .about-main .about-statement .eyebrow { grid-column: 1; grid-row: 2; padding-left: 11.302083vw; text-align: left; margin: 0; color: #ff4000; font: 700 1.770833vw/1.2 var(--font-body); }
-.page-about .about-main .about-statement h2 { grid-column: 1; grid-row: 3; width: 37.5vw; margin: 0; color: #ff4000; font: 700 1.979167vw/1.21 var(--font-body); letter-spacing: 0; text-transform: uppercase; }
+.page-about .about-main .about-statement .eyebrow { grid-column: 1; grid-row: 2; padding-left: 11.302083vw; text-align: left; margin: 0; color: var(--ink); font: 700 1.770833vw/1.2 var(--font-body); }
+.page-about .about-main .about-statement h2 { grid-column: 1; grid-row: 3; width: 37.5vw; margin: 0; color: var(--ink); font: 700 1.979167vw/1.21 var(--font-body); letter-spacing: 0; text-transform: uppercase; }
 .page-about .about-main .approach-link { position: relative; grid-column: 1; grid-row: 4; margin: 3.177083vw 0 3.645833vw .364583vw; font-size: .729167vw; z-index: 2; }
 .page-about .about-main .about-details { display: contents; }
 .page-about .about-main .about-details > section { grid-column: 3; grid-row: 3; width: auto; margin: 2.8125vw 0 0; }
-.page-about .about-main .about-details .year { position: absolute; z-index: 0; left: 25.78125vw; top: 29.4vw; right: auto; bottom: auto; color: rgb(166 163 153 / .15); opacity: 1; font: 700 18.229167vw/1 var(--font-body); letter-spacing: 0; pointer-events: none; }
+.page-about .about-main .about-details .year { position: absolute; z-index: 0; left: 25.78125vw; top: 29.4vw; right: auto; bottom: auto; color: color-mix(in srgb, var(--ink) 15%, transparent); opacity: 1; font: 700 18.229167vw/1 var(--font-body); letter-spacing: 0; pointer-events: none; }
 @media (max-width: 800px) {
   body.page-about .site-header { height: auto; min-height: 150px; padding: 1.25rem var(--gutter); grid-template-columns: minmax(0, 1fr) auto; }
   body.page-about .site-header .header-location { grid-column: 2; grid-row: 1; }
@@ -54,22 +54,22 @@ body.page-about > .about-background-stage { position: absolute; z-index: 0; left
 .page-about .audio-reference-wave { width: 34px; height: 9px; object-fit: contain; }
 @media (min-width: 801px) {
   body.page-about .site-header { display: block; height: 10.78125vw; min-height: 0; padding: 0; font-size: .7291667vw; }
-  .page-about .site-header .audio-indicator { position: absolute; left: 4.791667vw; top: 3.072917vw; gap: 0; font-size: .7291667vw; font-weight: 600; line-height: 1.1979167vw; color: #a6a399; }
+  .page-about .site-header .audio-indicator { position: absolute; left: 4.791667vw; top: 3.072917vw; gap: 0; font-size: .7291667vw; font-weight: 600; line-height: 1.1979167vw; color: var(--muted); }
   .page-about .audio-indicator > span { width: 2.34375vw; }
   .page-about .audio-reference-control { margin-right: 4px; }
   .page-about .site-header nav { position: absolute; left: 15.625vw; top: 3.072917vw; display: block; width: 8vw; font-size: .6770833vw; line-height: 1.1979167vw; }
-  .page-about .site-header .menu-label { display: block; color: #b8b5ad; font-size: .7291667vw; font-weight: 600; line-height: 1.1979167vw; margin: 0 0 .15625vw; }
+  .page-about .site-header .menu-label { display: block; color: var(--muted); font-size: .7291667vw; font-weight: 600; line-height: 1.1979167vw; margin: 0 0 .15625vw; }
   .page-about .site-header nav a { display: block; position: relative; height: .78125vw; margin-left: .0520833vw; line-height: 1.1979167vw; }
   .page-about .site-header nav a:first-of-type { height: .78125vw; }
   .page-about .site-header nav a[aria-current] { padding-left: .8333333vw; }
   .page-about .site-header nav a[aria-current]::before { position: absolute; left: 0; content: '\2192'; font-weight: 400; }
   .page-about .site-header .header-location { position: absolute; left: 46.875vw; top: 3.3854167vw; padding: 0; font-size: .78125vw; font-weight: 600; line-height: normal; }
-  .page-about .site-header .clock { position: absolute; left: .0520833vw; top: 1.3541667vw; margin: 0; font-size: .7291667vw; font-weight: 600; color: #b3aea9; white-space: nowrap; }
+  .page-about .site-header .clock { position: absolute; left: .0520833vw; top: 1.3541667vw; margin: 0; font-size: .7291667vw; font-weight: 600; color: var(--muted); white-space: nowrap; }
   .page-about .site-header .header-inquiry { position: absolute; left: 80.3125vw; top: 3.2291667vw; padding: 0; font-size: .7291667vw; font-weight: 300; line-height: normal; }
   .page-about .header-inquiry a { font-weight: 600; }
   .page-about .about-main .about-capabilities { margin-top: 5.78125vw; }
-  .page-about .about-capabilities .eyebrow { margin-bottom: .5729167vw; color: #b8b5ad; line-height: 1.1979167vw; }
-  .page-about .about-details h2 { color: #b8b5ad; line-height: 1.1979167vw; margin-bottom: .4166667vw; }
+  .page-about .about-capabilities .eyebrow { margin-bottom: .5729167vw; color: var(--muted); line-height: 1.1979167vw; }
+  .page-about .about-details h2 { color: var(--muted); line-height: 1.1979167vw; margin-bottom: .4166667vw; }
   .page-about .about-main .about-details > section { margin-top: 2.8125vw; }
   .page-about .about-main .about-details .year { top: 33.958333vw; line-height: 4.6875vw; }
   .page-about .about-main .approach-link { font-size: .78125vw; line-height: 1.1979167vw; font-weight: 700; margin-top: 2.760417vw; }
