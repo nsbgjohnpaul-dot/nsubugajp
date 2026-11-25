@@ -173,6 +173,7 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 .page-idea .idea-preview-caption p { margin:.25rem 0 0; }
 
 .idea-cube-stage {
+  --cube-inner: #fff;
   --cube-size: clamp(4.5rem, min(37vw, 30.5svh), 19.25rem);
   --cube-depth: calc(var(--cube-size) / 2);
   --cube-corner: clamp(2px, calc(var(--cube-size) / 55), 5px);
@@ -184,6 +185,8 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
   height: calc(var(--cube-size) * 1.8);
   perspective: max(700px, calc(var(--cube-size) * 5));
 }
+
+.theme-dark .idea-cube-stage { --cube-inner: #000; }
 
 .idea-cube-stage::before {
   content: '';
@@ -218,7 +221,7 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
   inset: 0;
   overflow: hidden;
   border-radius: var(--cube-corner);
-  background: #1e1e1e;
+  background: var(--cube-inner);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transform: var(--face-rotation) translateZ(var(--cube-depth));
@@ -261,7 +264,7 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
   position: absolute;
   inset: 0;
   border-radius: var(--cube-corner);
-  background: #202020;
+  background: var(--cube-inner);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transform: var(--face-rotation) translateZ(calc(var(--piece-size) / 2));
