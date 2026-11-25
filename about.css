@@ -48,9 +48,6 @@ body.page-about .about-main { display: grid; flex: none; position: relative; gri
 }
 @font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('assets/dm-mono-medium.ttf') format('truetype'); }
 body.page-about::before { display: none; }
-body.page-about > .about-background-stage { position: absolute; z-index: 0; left: 0; top: 0; width: 1920px; height: 1024px; transform-origin: top left; pointer-events: none; overflow: hidden; }
-.about-character-field { position: absolute; left: 80px; top: 4px; width: 1822.25px; height: 1689.05px; color: rgba(192,192,192,.5); font-family: 'DM Mono', monospace; font-weight: 500; }
-.about-character-field span { position: absolute; display: block; text-align: center; transform: translate(-50%, -50%); }
 .page-about .audio-reference-control { width: 8px; height: 9px; object-fit: contain; }
 .page-about .audio-reference-wave { width: 34px; height: 9px; object-fit: contain; }
 @media (min-width: 801px) {

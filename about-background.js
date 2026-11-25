@@ -9,6 +9,8 @@ const aboutGlyphData = [
 const aboutStage = document.createElement('div');
 aboutStage.className = 'about-background-stage';
 aboutStage.setAttribute('aria-hidden', 'true');
+const aboutLayout = document.createElement('div');
+aboutLayout.className = 'about-background-layout';
 const aboutField = document.createElement('div');
 aboutField.className = 'about-character-field';
 aboutField.dataset.nodeId = '190:40285';
@@ -25,14 +27,21 @@ for (let i = 0; i < aboutBytes.length; i += 8) {
   aboutGlyphs.append(glyph);
 }
 aboutField.append(aboutGlyphs);
-aboutStage.append(aboutField);
+aboutLayout.append(aboutField);
+aboutStage.append(aboutLayout);
 document.body.prepend(aboutStage);
 function fitAboutBackground() {
-  const scale = Math.max(window.innerWidth / 1920, window.innerHeight / 1024);
-  aboutStage.dataset.scale = scale;
-  aboutStage.style.transform = `scale(${scale})`;
-  aboutStage.style.left = `${(window.innerWidth - 1920 * scale) / 2}px`;
+  const scaleX = aboutStage.clientWidth / aboutLayout.offsetWidth;
+  const scaleY = aboutStage.clientHeight / aboutLayout.offsetHeight;
+  if (!scaleX || !scaleY) return;
+  const glyphScale = Math.sqrt(scaleX * scaleY);
+  aboutStage.dataset.scaleX = scaleX;
+  aboutStage.dataset.scaleY = scaleY;
+  aboutLayout.style.transform = `scale(${scaleX}, ${scaleY})`;
+  aboutLayout.style.setProperty('--glyph-scale-x', glyphScale / scaleX);
+  aboutLayout.style.setProperty('--glyph-scale-y', glyphScale / scaleY);
 }
 fitAboutBackground();
-window.addEventListener('resize', fitAboutBackground);
+if (typeof ResizeObserver === 'function') new ResizeObserver(fitAboutBackground).observe(aboutStage);
+else window.addEventListener('resize', fitAboutBackground);
 if (new URLSearchParams(location.search).has('design-check')) aboutField.style.animation = 'none';

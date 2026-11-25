@@ -95,9 +95,10 @@ body.page-about .about-main .approach-link { left:4.947917vw; }
 /* One shared About-style character background on every page. */
 @font-face { font-family:'DM Mono'; font-style:normal; font-weight:500; font-display:swap; src:url('assets/dm-mono-medium.ttf') format('truetype'); }
 body[class]::before { display:none; }
-body[class] > .about-background-stage { position:fixed; z-index:0; left:0; top:0; width:1920px; height:1024px; transform-origin:top left; pointer-events:none; overflow:hidden; }
-.about-character-field { position:absolute; left:80px; top:4px; width:1822.25px; height:1689.05px; color:rgba(192,192,192,.5); font-family:'DM Mono',monospace; font-weight:500; }
-.about-character-field span { position:absolute; display:block; text-align:center; transform:translate(-50%,-50%); }
+body[class] > .about-background-stage { position:fixed; z-index:0; inset:0; pointer-events:none; overflow:hidden; }
+.about-background-layout { position:absolute; top:0; left:0; width:1822.25px; height:1689.05px; transform-origin:top left; }
+.about-character-field { position:absolute; inset:0; color:rgba(192,192,192,.5); font-family:'DM Mono',monospace; font-weight:500; }
+.about-character-field span { position:absolute; display:block; text-align:center; transform:translate(-50%,-50%) scale(var(--glyph-scale-x, 1), var(--glyph-scale-y, 1)); }
 /* Case-study content shares Audio's left margin. */
 body.page-case .case-main { width:100%; max-width:none; margin-inline:0; padding-inline:5.4166667vw; text-align:left; }
 body.page-case .case-copy .case-intro { grid-template-columns:minmax(0,1fr); gap:1rem; }
