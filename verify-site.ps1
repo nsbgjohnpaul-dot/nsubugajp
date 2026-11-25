@@ -107,7 +107,7 @@ try {
   $mobileAnchors=$null
   foreach($mobilePage in @('index.html','work.html','about.html','idea-box.html','contact.html','body-and-soil.html')) {
     Visit $mobilePage
-    Assert (Js '!document.querySelector(".header-inquiry") && getComputedStyle(document.querySelector(".site-header nav")).display==="block"') "Mobile header uses the three-column Figma layout: $mobilePage"
+    Assert (Js '(() => { const inquiry = document.querySelector(".header-inquiry"); return (!inquiry || getComputedStyle(inquiry).display === "none") && getComputedStyle(document.querySelector(".site-header nav")).display === "block"; })()') "Mobile header uses the three-column Figma layout: $mobilePage"
     $anchors=Js 'JSON.stringify([".audio-indicator",".site-header nav",".header-location"].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [Math.round(r.left),Math.round(r.top)]}))'
     if(!$mobileAnchors){$mobileAnchors=$anchors}
     Assert ($anchors -eq $mobileAnchors) "Mobile header positions match: $mobilePage"

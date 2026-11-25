@@ -26,14 +26,20 @@ body[class] > .site-header .header-location { position:absolute; left:var(--loca
 body[class] > .site-header .clock { position:static; display:block; margin:8px 0 0; color:var(--muted); font:600 clamp(10px,.7291667vw,14px)/normal var(--font-body); white-space:nowrap; }
 .footer-email { color:var(--ink); font:600 var(--header-email-size)/1.25 var(--font-body); white-space:nowrap; }
 .footer-email-label { font-weight:300; }
-body[class]:not(.page-case) > footer .footer-email {
+body[class] > .site-header .header-inquiry {
+  position:absolute;
+  right:var(--page-right-inset);
+  top:calc(clamp(1.75rem,2.8645833vw,3.4375rem) + 3px);
+  margin:0;
+  padding:0;
+  font:300 var(--header-email-size)/normal var(--font-body);
+  text-align:right;
+  white-space:nowrap;
+}
+body[class] > .site-header .header-inquiry a { font-weight:600; text-decoration:underline; }
+body.page-idea > footer .footer-email {
   position:fixed;
   inset:auto auto var(--footer-baseline) var(--location-inset);
-}
-body.page-case .case-footer { position:relative; }
-body.page-case .case-footer .footer-email {
-  position:absolute;
-  inset-inline-start:calc(var(--location-inset) - var(--page-right-inset));
 }
 /* Align the site signature and About's process link to one shared baseline. */
 body[class]:not(.page-case) > footer { position:fixed; z-index:5; left:6.0416667vw; right:auto; top:auto; bottom:var(--footer-baseline); width:max-content; height:auto; min-height:0; padding:0; margin:0; display:block; }
@@ -53,9 +59,8 @@ body.page-work .work-main { margin-bottom:10svh; }
   body[class] > .site-header .menu-label { margin:0 4px 0 0; font-size:11px; }
   body[class] > .site-header nav a { display:inline-block; height:auto; margin:0; line-height:23px; }
   body[class] > .site-header nav a[aria-current] { padding-left:12px; }
-  body[class]:not(.page-case) > footer .footer-email { inset-inline: auto var(--mobile-location-inset); }
-  body.page-case .case-footer { flex-wrap:wrap; padding-inline-end:max(0px, calc(var(--mobile-location-inset) - var(--page-right-inset))); }
-  body.page-case .case-footer .footer-email { position:static; margin-inline-start:auto; }
+  body.page-idea > footer .footer-email { inset-inline:auto var(--mobile-location-inset); }
+  body[class] > .site-header .header-inquiry { display:none; }
   body[class]:not(.page-case) > footer { left:var(--gutter); }
   body.page-about .about-main .approach-link { position:static; margin:0; }
   html:has(> body.page-about), html:has(> body.page-idea) { height:auto; overflow:auto; }
