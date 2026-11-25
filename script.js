@@ -141,7 +141,7 @@ if (ideaBoard) {
       ['bottom', ([x, y, z]) => [y, x, -z]],
     ];
     const stickers = surfaces.map(() => []);
-    const images = surfaces.map(() => '');
+    const images = surfaces.map(() => null);
     let lastTurn = -1;
     let activeTurn;
 
@@ -162,8 +162,13 @@ if (ideaBoard) {
         const [outer, column, row] = coordinates(origin);
         if (outer === 1) {
           face.classList.add('idea-cube-sticker');
-          face.style.backgroundPosition = ((column + 1) * 50) + '% ' + ((row + 1) * 50) + '%';
-          stickers[faceIndex].push(face);
+          const artwork = document.createElement('img');
+          artwork.alt = '';
+          artwork.decoding = 'async';
+          artwork.style.left = -100 * (column + 1) + '%';
+          artwork.style.top = -100 * (row + 1) + '%';
+          face.append(artwork);
+          stickers[faceIndex].push(artwork);
         }
         element.append(face);
       });
@@ -175,10 +180,14 @@ if (ideaBoard) {
 
     refreshCubeArtwork = () => {
       cubeFaces.forEach((face, index) => {
-        const image = face.querySelector('img').src;
+        const image = face.querySelector('img');
         if (image === images[index]) return;
         images[index] = image;
-        for (const sticker of stickers[index]) sticker.style.backgroundImage = 'url("' + image + '")';
+        for (const sticker of stickers[index]) {
+          sticker.sizes = image.sizes;
+          sticker.srcset = image.srcset;
+          sticker.src = image.src;
+        }
       });
     };
     refreshCubeArtwork();
