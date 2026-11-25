@@ -119,106 +119,109 @@
   background: transparent;
   color: inherit;
   font: inherit;
+  font-size: var(--header-email-size);
   font-weight: 700;
   text-decoration: underline;
   cursor: pointer;
 }
 
-.contact-music {
-  --record-width: clamp(4rem, 8.594vw, 10.3125rem);
-  position: fixed;
-  z-index: 6;
-  left: calc(94.48vw - var(--record-width));
-  bottom: 6.15svh;
-  width: var(--record-width);
-  padding: 0;
+.contact-music-player {
+  display: grid;
+  justify-items: center;
+  gap: .5rem;
+  align-self: end;
+  width: min(100%, 11.75rem);
+  max-height: 100%;
+  margin-inline-start: auto;
+  margin-inline-end: calc(var(--page-right-inset) - var(--gutter));
+  padding: 1.125rem .75rem .625rem;
+  overflow: auto;
+  border-radius: 2.5rem;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+.contact-music-player h2 {
+  font: 500 1.25rem/1.2 var(--font-headline);
+  text-align: center;
+}
+
+.contact-music-player img {
+  display: block;
+  width: min(100%, 6.75rem);
+  height: auto;
+  max-height: 22svh;
+  object-fit: contain;
+}
+
+.contact-music-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  width: min(100%, 6.625rem);
+  min-height: 1.75rem;
+  padding: .2rem .65rem;
   border: 0;
-  background: transparent;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .875rem;
+  text-decoration: none;
   cursor: pointer;
 }
 
-.contact-music-player {
-  color-scheme: light;
-  position: fixed;
-  inset: auto 5.52vw calc(6.15svh + clamp(5rem, 10.73vw, 12.9rem)) auto;
-  width: min(26rem, 89vw);
-  max-height: min(27rem, 65svh);
-  margin: 0;
-  padding: .75rem;
-  border: 1px solid var(--ink);
-  border-radius: .5rem;
+.contact-music-play:focus-visible {
+  outline-color: var(--ink);
+}
+
+.contact-music-dialog {
+  width: min(30rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
   background: var(--surface);
   color: var(--ink);
 }
 
-.theme-dark .contact-music-player { color-scheme: dark; }
+.contact-music-dialog::backdrop { background: rgb(0 0 0 / .45); }
 
-.contact-music-player button {
-  display: block;
-  margin: 0 0 .5rem auto;
-  padding: .25rem .5rem;
-  border: 1px solid currentColor;
-  background: transparent;
+.contact-music-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: .75rem;
+}
+
+.contact-music-dialog-header h2 { font: 500 1.25rem/1.2 var(--font-headline); }
+
+.contact-music-dialog-header button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .35rem .75rem;
+  background: var(--card);
   color: inherit;
   font: inherit;
   cursor: pointer;
 }
 
-.contact-music-player iframe {
+.contact-music-dialog iframe {
   display: block;
   width: 100%;
-  height: min(22rem, 53svh);
+  height: min(28rem, 65dvh);
   border: 0;
-  color-scheme: inherit;
-  filter: grayscale(1);
+  border-radius: .75rem;
 }
 
-.contact-music img { width: 100%; height: auto; }
-.contact-music-playing,
-.contact-music-platter { display: none; position: absolute; inset: 0; }
-.contact-music[data-playing] .contact-music-rest { visibility: hidden; }
-.contact-music[data-playing] :is(.contact-music-playing, .contact-music-platter) { display: block; }
-
-/* Clip the rotating disc below the stationary tonearm. */
-.contact-music-platter {
-  pointer-events: none;
-  clip-path: polygon(0 0, 100% 0, 100% 83%, 87% 83%, 83% 79%, 71% 78%, 53% 72%, 38% 66%, 29% 59%, 25% 58%, 21% 60%, 22% 64%, 33% 70%, 51% 77%, 61% 82%, 0 86%);
+.contact-music-app {
+  display: block;
+  width: fit-content;
+  margin: .75rem auto 0;
+  font-size: .875rem;
 }
-
-.contact-music-platter span {
-  position: absolute;
-  top: 7.3%;
-  left: 2.4%;
-  width: 93.9%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: url("assets/contact-vinyl-rest.png") 45.5% 29.2% / 106.25% 132.77% no-repeat;
-}
-
-.contact-music[data-playing] .contact-music-platter span { animation: contact-vinyl-spin 1.8s linear infinite; }
-
-.theme-dark .contact-music-platter { display: block; }
-.theme-dark .contact-music-platter span {
-  background-color: #e0b400;
-  background-blend-mode: screen;
-}
-.theme-dark .contact-music:not([data-playing]) .contact-music-platter { clip-path: none; }
-.theme-dark .contact-music:not([data-playing]) .contact-music-platter span {
-  top: 7.2%;
-  left: 2.67%;
-  width: 94.12%;
-}
-
-@keyframes contact-vinyl-spin {
-  to { transform: rotate(1turn); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .contact-music[data-playing] .contact-music-platter span { animation: none; }
-  body:not(.theme-dark) .contact-music[data-playing] .contact-music-platter { display: none; }
-}
-
-.theme-dark .contact-music img { filter: drop-shadow(0 0 2px #ffffff); }
 
 @media (960px < width <= 1400px) {
   .contact-date { margin-top: 8px; line-height: 30px; }
@@ -237,7 +240,7 @@
     align-self: start;
     width: 100%;
     min-height: 0;
-    max-height: calc(100% - clamp(4rem, 10.73vw, 6.45rem));
+    max-height: none;
     margin-inline-start: 0;
     padding: 1rem;
     column-gap: 5%;
@@ -247,8 +250,18 @@
 
   .contact-field,
   .contact-letter input { min-height: 2rem; }
-  .contact-music { --record-width: clamp(3rem, 8.594vw, 5.2rem); bottom: 1rem; }
-  .contact-music-player { bottom: calc(1.5rem + clamp(3.75rem, 10.75vw, 6.5rem)); }
+  .page-contact main {
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+  }
+
+  .page-contact .contact-card,
+  .contact-music-player { flex-shrink: 0; }
+
+  .contact-music-player {
+    max-height: none;
+  }
 }
 
 @media (max-width: 480px) {

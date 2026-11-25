@@ -34,7 +34,6 @@
       <span class="theme-thumb" aria-hidden="true"></span>
     </button>
     <div class="header-location"><p class="location">Working Globally</p><time class="clock" data-clock>EAT</time></div>
-    <p class="header-inquiry">For Inquiries <a href="mailto:hello@nsubugajp.com">hello@nsubugajp.com</a></p>
   </header>
   <main id="main" class="wrap">
     <section class="contact-card" aria-labelledby="contact-name">
@@ -204,18 +203,26 @@
         window.location.href = `${letter.action}?subject=${encodeURIComponent(subject.value)}&body=${encodeURIComponent(body)}`;
       });
     </script>
+    <section class="contact-music-player" aria-labelledby="contact-music-title">
+      <h2 id="contact-music-title">Studio Vybz</h2>
+      <a class="contact-music-play" href="https://music.apple.com/ug/playlist/studio-vybz/pl.u-WabZvd3CRr40jYo" aria-label="Play Studio Vybz on Apple Music" aria-haspopup="dialog" aria-controls="contact-music-dialog">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M3 2a1 1 0 0 1 1.5-.87l10 6a1 1 0 0 1 0 1.74l-10 6A1 1 0 0 1 3 14Z"/></svg>
+        Play
+      </a>
+      <img src="assets/contact-vinyl-rest.png" width="1122" height="1402" alt="">
+    </section>
   </main>
+  <dialog id="contact-music-dialog" class="contact-music-dialog" aria-labelledby="contact-music-dialog-title">
+    <div class="contact-music-dialog-header">
+      <h2 id="contact-music-dialog-title">Studio Vybz</h2>
+      <form method="dialog"><button type="submit" autofocus>Close</button></form>
+    </div>
+    <iframe title="Studio Vybz playback and current track on Apple Music" allow="autoplay *; encrypted-media *"></iframe>
+    <a class="contact-music-app" href="https://music.apple.com/ug/playlist/studio-vybz/pl.u-WabZvd3CRr40jYo" target="_blank" rel="noopener">Open in Apple Music</a>
+  </dialog>
   <footer>
     <a class="frame-signature" href="index.html">Nsubuga John Paul</a>
+    <a class="footer-email" href="mailto:hello@nsubugajp.com"><span class="footer-email-label">For Inquiries</span> hello@nsubugajp.com</a>
   </footer>
-  <button class="contact-music" type="button" popovertarget="contact-music-player" aria-label="Open Studio Vybz player" data-developer-token="">
-    <img class="contact-music-rest" src="assets/contact-vinyl-rest.png" width="1122" height="1402" alt="">
-    <img class="contact-music-playing" src="assets/contact-vinyl.png" width="165" height="206" alt="">
-    <span class="contact-music-platter" aria-hidden="true"><span></span></span>
-  </button>
-  <section id="contact-music-player" class="contact-music-player" popover aria-label="Studio Vybz player">
-    <button type="button" popovertarget="contact-music-player" popovertargetaction="hide">Close</button>
-    <iframe title="Studio Vybz on Apple Music" data-src="https://embed.music.apple.com/ug/playlist/studio-vybz/pl.u-WabZvd3CRr40jYo?autoplay=1" allow="autoplay *; encrypted-media *"></iframe>
-  </section>
 </body>
 </html>

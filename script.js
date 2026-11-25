@@ -101,18 +101,107 @@ if (ideaBoard) {
   const projectList = document.querySelector('.idea-project-list');
   const tiles = ideaBoard.querySelectorAll('.idea-tile');
   const cube = ideaBoard.querySelector('.idea-cube');
+  const cubeFaces = [...cube.querySelectorAll('.idea-cube-face')];
+  const cubeSlice = document.createElement('div');
+  cubeSlice.className = 'idea-cube-slice';
+  cubeSlice.setAttribute('aria-hidden', 'true');
+  cubeSlice.inert = true;
+  cube.append(cubeSlice);
+  const reducedCubeMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  // The reference loop is 198 frames at 25 fps. Its turns land nine frames apart.
+  const referenceTurns = ['x+', 'y+', 'y-', 'x+', 'y-', 'z+', 'x+', 'y-', 'y+', 'z-', 'y-',
+    'x-', 'x+', 'y-', 'z+', 'x-', 'x+', 'y+', 'y-', 'x-', 'z+', 'x+'];
+  const sliceTurnDuration = 270;
+  const sliceAxes = {
+    x: { end: [3, 1], edges: ['right', null, 'left', null, 'right', 'right'] },
+    y: { end: [4, 5], edges: ['bottom', 'bottom', 'bottom', 'bottom', null, null] },
+    z: { end: [2, 0], edges: [null, 'left', null, 'right', 'bottom', 'top'] },
+  };
+  const oppositeEdges = { left: 'right', right: 'left', top: 'bottom', bottom: 'top' };
+  const cut = (edge, amount) => 'inset(' + ['top', 'right', 'bottom', 'left']
+    .map(side => side === edge ? amount : '0').join(' ') + ')';
+  let sliceAnimation;
+  let lastTurn = -1;
+
+  function clearCubeTwist() {
+    sliceAnimation?.cancel();
+    sliceAnimation = undefined;
+    cube.removeAttribute('data-twisting');
+  }
+
+  function updateCubeTwist() {
+    requestAnimationFrame(updateCubeTwist);
+    const rotation = cube.getAnimations().find(animation => animation.animationName === 'idea-cube-rotate');
+    if (document.hidden || reducedCubeMotion.matches || !rotation || cube.contains(document.activeElement)) {
+      if (sliceAnimation) clearCubeTwist();
+      lastTurn = -1;
+      return;
+    }
+
+    if (rotation.currentTime === null) return;
+    const loopTime = referenceTurns.length * 360;
+    const timeScale = rotation.effect.getComputedTiming().duration / loopTime;
+    const time = rotation.currentTime / timeScale;
+    const frame = Math.floor(time / 40);
+    const turn = Math.floor(frame / 9);
+    const offset = time - turn * 360 - 40;
+    if (turn === lastTurn || offset < 0 || offset >= sliceTurnDuration) return;
+    lastTurn = turn;
+
+    const [axis, sign] = referenceTurns[turn % referenceTurns.length];
+    const direction = sign === '+' ? 1 : -1;
+    const { end, edges } = sliceAxes[axis];
+    const endFace = end[direction === 1 ? 1 : 0];
+    const strips = [];
+
+    cubeFaces.forEach((face, index) => {
+      const edge = direction === 1 ? edges[index] : oppositeEdges[edges[index]];
+      face.style.setProperty('--body-clip', edge ? cut(edge, '33.3333%')
+        : index === endFace ? 'inset(50%)' : 'none');
+      if (!edge && index !== endFace) return;
+      const strip = face.cloneNode(true);
+      strip.style.clipPath = edge ? cut(oppositeEdges[edge], '66.6667%') : 'none';
+      strips.push(strip);
+    });
+
+    const seam = 'calc(var(--cube-size) / ' + (direction * 6) + ')';
+    const cap = axis === 'x' ? 'translateX(' + seam + ') rotateY(90deg)'
+      : axis === 'y' ? 'translateY(' + seam + ') rotateX(90deg)'
+      : 'translateZ(' + seam + ')';
+    cube.style.setProperty('--slice-cap', cap);
+    cubeSlice.replaceChildren(...strips);
+    cube.setAttribute('data-twisting', '');
+
+    const rotate = angle => 'rotate' + axis.toUpperCase() + '(' + angle + 'deg)';
+    sliceAnimation = cubeSlice.animate([
+      { transform: rotate(0), easing: 'cubic-bezier(.55, 0, .45, 1)' },
+      { transform: rotate(direction * 89), offset: .78 },
+      { transform: rotate(direction * 90) },
+    ], sliceTurnDuration * timeScale);
+    sliceAnimation.currentTime = offset * timeScale;
+    sliceAnimation.onfinish = clearCubeTwist;
+  }
+
+  requestAnimationFrame(updateCubeTwist);
   const spareTiles = [...ideaBoard.querySelector('.idea-cube-artworks').content.querySelectorAll('.idea-tile')]
     .map(tile => document.adoptNode(tile));
+  for (const tile of [...tiles, ...spareTiles]) {
+    const grid = document.createElement('span');
+    grid.className = 'idea-cube-grid';
+    grid.setAttribute('aria-hidden', 'true');
+    for (let square = 0; square < 9; square++) {
+      grid.append(document.createElement('span'));
+    }
+    tile.append(grid);
+  }
   const queue = [...spareTiles];
   const faceAngles = [[0, 0], [0, -90], [0, 180], [0, 90], [-90, 0], [90, 0]];
-  const inquiry = document.querySelector('.header-inquiry');
-  const alignProjectList = () => {
-    const right = document.documentElement.clientWidth - inquiry.getBoundingClientRect().right;
-    projectList.closest('aside').style.setProperty('--idea-list-right', Math.max(0, right) + 'px');
-  };
-  new ResizeObserver(alignProjectList).observe(inquiry);
-  window.addEventListener('resize', alignProjectList);
-  alignProjectList();
+  const projectWheel = projectList.closest('aside');
+  let wheelCycleStart = 0;
+  let wheelCycleHeight = 0;
+  let wheelTarget = null;
+  let wheelFrame = 0;
+  let centeredProject;
   let selectionAnimation;
   let resumeTimer;
   const projectButtons = new Map();
@@ -123,16 +212,39 @@ if (ideaBoard) {
     activeProject?.removeAttribute('data-highlighted');
     button.setAttribute('data-highlighted', '');
     activeProject = button;
+  }
 
-    if (!matchMedia('(min-width: 801px)').matches) return;
-    const column = projectList.closest('aside');
-    const bounds = column.getBoundingClientRect();
-    const title = button.getBoundingClientRect();
-    if (column.scrollHeight > column.clientHeight) {
-      column.scrollTo({
-        top: column.scrollTop + title.top - bounds.top - (column.clientHeight - title.height) / 2,
-        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-      });
+  function updateProjectWheel() {
+    const radius = projectWheel.clientHeight / 2;
+    if (!radius) return;
+    let center = projectWheel.scrollTop + radius;
+    // Keep a full cycle on either side so recycling never exposes an end.
+    if (wheelCycleHeight && (center < wheelCycleStart - wheelCycleHeight ||
+      center >= wheelCycleStart + 2 * wheelCycleHeight)) {
+      const positionInCycle = ((center - wheelCycleStart) % wheelCycleHeight + wheelCycleHeight) % wheelCycleHeight;
+      const previousTop = projectWheel.scrollTop;
+      projectWheel.scrollTop = wheelCycleStart + positionInCycle - radius;
+      if (wheelTarget !== null) wheelTarget += projectWheel.scrollTop - previousTop;
+      center = projectWheel.scrollTop + radius;
+    }
+    let nearest;
+    let nearestDistance = Infinity;
+    for (const item of projectList.children) {
+      const distance = item.offsetTop + item.offsetHeight / 2 - center;
+      if (Math.abs(distance) > radius + item.offsetHeight) continue;
+      const angle = Math.max(-1, Math.min(1, distance / radius)) * .58;
+      const inset = (1 - Math.cos(angle)) * Math.min(radius, projectWheel.clientWidth);
+      item.style.setProperty('--wheel-inset', inset + 'px');
+      item.style.setProperty('--wheel-angle', -angle + 'rad');
+      if (Math.abs(distance) < nearestDistance) {
+        nearest = item;
+        nearestDistance = Math.abs(distance);
+      }
+    }
+    if (nearest !== centeredProject) {
+      centeredProject?.removeAttribute('data-centered');
+      nearest?.setAttribute('data-centered', '');
+      centeredProject = nearest;
     }
   }
 
@@ -150,7 +262,7 @@ if (ideaBoard) {
       wasVisible: false,
     }));
     setInterval(() => {
-      if (document.hidden || !queue.length || cube.contains(document.activeElement)) return;
+      if (document.hidden || cube.contains(document.activeElement)) return;
       const style = getComputedStyle(cube);
       if (style.animationPlayState !== 'running' || style.animationName === 'none') return;
 
@@ -164,7 +276,7 @@ if (ideaBoard) {
           facingArtwork = face.element.firstElementChild.dataset.artwork;
         }
         if (depth > .35) face.wasVisible = true;
-        if (depth > -.35 || !face.wasVisible) return;
+        if (depth > -.35 || !face.wasVisible || !queue.length || cube.dataset.twisting) return;
 
         // Swap only after an outward-facing artwork has turned fully away.
         const outgoing = face.element.firstElementChild;
@@ -179,7 +291,13 @@ if (ideaBoard) {
   const allTiles = [...tiles, ...spareTiles].sort((a, b) => a.dataset.artwork.localeCompare(b.dataset.artwork));
   const editions = { '01': 'Smoke Study', '03': 'Label Detail', '05': 'Studio Light', '06': 'Label Study', '07': 'Bottle Study' };
 
-  allTiles.concat(allTiles.slice(0, 4)).forEach((tile, index) => {
+  const wheelTiles = [...allTiles, ...allTiles.slice(0, 4)];
+  const cycleCount = 5;
+  const middleCycle = Math.floor(cycleCount / 2);
+  const loopTiles = Array.from({ length: cycleCount }, () => wheelTiles).flat();
+  loopTiles.forEach((tile, index) => {
+    const cycleIndex = index % wheelTiles.length;
+    const isMiddleCycle = Math.floor(index / wheelTiles.length) === middleCycle;
     const id = tile.dataset.artwork;
     const [name] = projects[id];
     const label = editions[id] ? name + ' · ' + editions[id] : name;
@@ -187,6 +305,10 @@ if (ideaBoard) {
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = name;
+    if (!isMiddleCycle || cycleIndex >= allTiles.length) {
+      item.setAttribute('aria-hidden', 'true');
+      button.tabIndex = -1;
+    }
     if (editions[id]) {
       const edition = document.createElement('small');
       edition.textContent = editions[id];
@@ -194,18 +316,23 @@ if (ideaBoard) {
     }
     item.append(button);
     projectList.append(item);
-    if (!projectButtons.has(id)) projectButtons.set(id, button);
+    if (isMiddleCycle && cycleIndex < allTiles.length) projectButtons.set(id, button);
 
     function turnToArtwork() {
       highlightProject(button);
+      wheelTarget = null;
+      projectWheel.scrollTo({
+        top: item.offsetTop + (item.offsetHeight - projectWheel.clientHeight) / 2,
+        behavior: reducedCubeMotion.matches ? 'instant' : 'smooth',
+      });
       const from = getComputedStyle(cube).transform;
       clearTimeout(resumeTimer);
       selectionAnimation?.cancel();
 
-      const faces = [...cube.children];
-      let faceIndex = faces.indexOf(tile.parentElement);
+      clearCubeTwist();
+      let faceIndex = cubeFaces.indexOf(tile.parentElement);
       if (faceIndex === -1) {
-        const front = faces[0];
+        const front = cubeFaces[0];
         queue.splice(queue.indexOf(tile), 1, front.firstElementChild);
         front.replaceChildren(tile);
         faceIndex = 0;
@@ -231,7 +358,7 @@ if (ideaBoard) {
       };
     }
 
-    if (index < allTiles.length) {
+    if (isMiddleCycle && cycleIndex < allTiles.length) {
       tile.setAttribute('aria-label', 'View ' + label);
       tile.addEventListener('pointerenter', () => highlightProject(button));
       tile.addEventListener('focus', () => highlightProject(button));
@@ -239,6 +366,43 @@ if (ideaBoard) {
     }
     button.addEventListener('click', turnToArtwork);
   });
+
+  const firstMiddleItem = projectList.children[middleCycle * wheelTiles.length];
+  const firstNextItem = projectList.children[(middleCycle + 1) * wheelTiles.length];
+  function measureProjectWheel() {
+    wheelCycleStart = firstMiddleItem.offsetTop;
+    wheelCycleHeight = firstNextItem.offsetTop - wheelCycleStart;
+    updateProjectWheel();
+  }
+
+  function glideProjectWheel() {
+    wheelFrame = 0;
+    if (wheelTarget === null) return;
+    const remaining = wheelTarget - projectWheel.scrollTop;
+    projectWheel.scrollTop = Math.abs(remaining) < 4 ? wheelTarget : projectWheel.scrollTop + remaining * .2;
+    updateProjectWheel();
+    if (Math.abs(remaining) >= 4) wheelFrame = requestAnimationFrame(glideProjectWheel);
+    else wheelTarget = null;
+  }
+
+  projectWheel.addEventListener('wheel', event => {
+    if (event.ctrlKey || reducedCubeMotion.matches || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? projectWheel.clientHeight : 1;
+    const delta = Math.max(-projectWheel.clientHeight, Math.min(projectWheel.clientHeight, event.deltaY * unit));
+    wheelTarget = Math.max(0, Math.min(projectWheel.scrollHeight - projectWheel.clientHeight,
+      (wheelTarget ?? projectWheel.scrollTop) + delta));
+    if (!wheelFrame) wheelFrame = requestAnimationFrame(glideProjectWheel);
+  }, { passive: false });
+
+  const openingIndex = matchMedia('(min-width: 801px)').matches ? Math.floor((wheelTiles.length - 1) / 2) : 0;
+  const openingItem = projectList.children[middleCycle * wheelTiles.length + openingIndex];
+  projectWheel.scrollTop = openingItem.offsetTop + (openingItem.offsetHeight - projectWheel.clientHeight) / 2;
+  projectWheel.addEventListener('scroll', updateProjectWheel, { passive: true });
+  const wheelResize = new ResizeObserver(measureProjectWheel);
+  wheelResize.observe(projectWheel);
+  wheelResize.observe(projectList);
+  measureProjectWheel();
 }
 
 const themeToggle = document.querySelector('[data-theme-toggle]');

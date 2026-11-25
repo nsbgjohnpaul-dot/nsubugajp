@@ -85,11 +85,11 @@ try {
   foreach($page in @('index.html','work.html','about.html','idea-box.html','contact.html','body-and-soil.html')) {
     Visit $page
     Assert (Js 'document.querySelectorAll(".about-background-stage").length===1 && document.querySelectorAll(".about-character-field span").length===8000') "Shared background loads on $page"
-    $positions=Js 'JSON.stringify([".audio-indicator",".site-header nav",".header-location",".header-inquiry"].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [Math.round(r.x*10)/10,Math.round(r.y*10)/10]}))'
+    $positions=Js 'JSON.stringify([".audio-indicator",".site-header nav",".header-location"].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [Math.round(r.x*10)/10,Math.round(r.y*10)/10]}))'
     if(!$reference){$reference=$positions}
     Assert ($positions -eq $reference) "Header anchors match on $page"
     $null=Js 'window.scrollTo(0,400)'
-    Assert ((Js 'JSON.stringify([".audio-indicator",".site-header nav",".header-location",".header-inquiry"].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [Math.round(r.x*10)/10,Math.round(r.y*10)/10]}))') -eq $reference) "Header stays fixed while scrolling $page"
+    Assert ((Js 'JSON.stringify([".audio-indicator",".site-header nav",".header-location"].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [Math.round(r.x*10)/10,Math.round(r.y*10)/10]}))') -eq $reference) "Header stays fixed while scrolling $page"
   }
   Visit 'about.html'
   $null=Js '(()=>{const g=[...document.querySelectorAll(".about-character-field span")].find(e=>{const r=e.getBoundingClientRect();return r.x>300&&r.x<800&&r.y>200&&r.y<600});const r=g.getBoundingClientRect();document.dispatchEvent(new PointerEvent("pointermove",{clientX:r.x+r.width/2,clientY:r.y+r.height/2,bubbles:true}))})()'
@@ -107,7 +107,7 @@ try {
   $mobileAnchors=$null
   foreach($mobilePage in @('index.html','work.html','about.html','idea-box.html','contact.html','body-and-soil.html')) {
     Visit $mobilePage
-    Assert (Js 'getComputedStyle(document.querySelector(".header-inquiry")).display==="none" && getComputedStyle(document.querySelector(".site-header nav")).display==="block"') "Mobile header uses the three-column Figma layout: $mobilePage"
+    Assert (Js '!document.querySelector(".header-inquiry") && getComputedStyle(document.querySelector(".site-header nav")).display==="block"') "Mobile header uses the three-column Figma layout: $mobilePage"
     $anchors=Js 'JSON.stringify([".audio-indicator",".site-header nav",".header-location"].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [Math.round(r.left),Math.round(r.top)]}))'
     if(!$mobileAnchors){$mobileAnchors=$anchors}
     Assert ($anchors -eq $mobileAnchors) "Mobile header positions match: $mobilePage"

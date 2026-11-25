@@ -1,5 +1,5 @@
 /* Shared navigation and audio controls: identical anchors on every page. */
-body[class] { --header-space:clamp(8.5rem,17svh,11rem); --footer-baseline:7svh; padding-top:var(--header-space); }
+body[class] { --header-space:clamp(8.5rem,17svh,11rem); --footer-baseline:7svh; --header-email-size:clamp(10px,.7291667vw,14px); --location-inset:47.5520833vw; --page-right-inset:5.4166667vw; padding-top:var(--header-space); }
 body.page-about { --header-space:10.78125vw; }
 body.page-idea { --header-space:8.4895833vw; }
 body.page-case { --header-space:clamp(9rem,10vw,12rem); }
@@ -16,10 +16,19 @@ body[class] > .site-header .menu-label { display:block; margin:0 0 3px; color:va
 body[class] > .site-header nav a { display:block; position:relative; margin:0 0 0 1px; padding:0; height:15px; line-height:23px; transform:none; white-space:nowrap; }
 body[class] > .site-header nav a[aria-current] { padding-left:16px; }
 body[class] > .site-header nav a[aria-current]::before { position:absolute; left:0; content:'\2192'; font-weight:400; }
-body[class] > .site-header .header-location { position:absolute; left:47.5520833vw; top:calc(clamp(1.75rem,2.8645833vw,3.4375rem) + 5px); padding:0; text-align:left; font:600 clamp(11px,.78125vw,15px)/normal var(--font-body); }
+body[class] > .site-header .header-location { position:absolute; left:var(--location-inset); top:calc(clamp(1.75rem,2.8645833vw,3.4375rem) + 5px); padding:0; text-align:left; font:600 clamp(11px,.78125vw,15px)/normal var(--font-body); }
 body[class] > .site-header .clock { position:static; display:block; margin:8px 0 0; color:var(--muted); font:600 clamp(10px,.7291667vw,14px)/normal var(--font-body); white-space:nowrap; }
-body[class] > .site-header .header-inquiry { position:absolute; left:80.9375vw; top:calc(clamp(1.75rem,2.8645833vw,3.4375rem) + 3px); padding:0; margin:0; font:300 clamp(10px,.7291667vw,14px)/normal var(--font-body); white-space:nowrap; }
-body[class] > .site-header .header-inquiry a { font-weight:600; text-decoration:underline; }
+.footer-email { color:var(--ink); font:600 var(--header-email-size)/1.25 var(--font-body); white-space:nowrap; }
+.footer-email-label { font-weight:300; }
+body[class]:not(.page-case) > footer .footer-email {
+  position:fixed;
+  inset:auto auto var(--footer-baseline) var(--location-inset);
+}
+body.page-case .case-footer { position:relative; }
+body.page-case .case-footer .footer-email {
+  position:absolute;
+  inset-inline-start:calc(var(--location-inset) - var(--page-right-inset));
+}
 /* Align the site signature and About's process link to one shared baseline. */
 body[class]:not(.page-case) > footer { position:fixed; z-index:5; left:6.0416667vw; right:auto; top:auto; bottom:var(--footer-baseline); width:max-content; height:auto; min-height:0; padding:0; margin:0; display:block; }
 body[class]:not(.page-case) > footer .frame-signature,
@@ -29,7 +38,7 @@ body[class] > footer .frame-copyright { position:fixed; right:5vw; bottom:var(--
 body.page-about .about-main .approach-link { position:fixed; z-index:6; inset:auto auto var(--footer-baseline) 6.0416667vw; margin:0; padding:0; width:max-content; font:700 clamp(12px,.78125vw,15px)/1.25 var(--font-body); }
 body.page-work .work-main { margin-bottom:10svh; }
 @media (max-width:800px) {
-  body[class] { --header-space:145px; --footer-baseline:24px; }
+  body[class] { --header-space:145px; --footer-baseline:24px; --header-email-size:10px; --page-right-inset:var(--gutter); --mobile-location-inset:6.1538462vw; }
   body[class] > header.site-header.wrap { height:132px; }
   body[class] > .site-header .audio-indicator { left:var(--gutter); top:18px; font-size:11px; }
   body[class] > .site-header .header-location { left:auto; right:var(--gutter); top:20px; text-align:right; font-size:11px; }
@@ -38,7 +47,9 @@ body.page-work .work-main { margin-bottom:10svh; }
   body[class] > .site-header .menu-label { margin:0 4px 0 0; font-size:11px; }
   body[class] > .site-header nav a { display:inline-block; height:auto; margin:0; line-height:23px; }
   body[class] > .site-header nav a[aria-current] { padding-left:12px; }
-  body[class] > .site-header .header-inquiry { left:var(--gutter); top:89px; font-size:10px; }
+  body[class]:not(.page-case) > footer .footer-email { inset-inline: auto var(--mobile-location-inset); }
+  body.page-case .case-footer { flex-wrap:wrap; padding-inline-end:max(0px, calc(var(--mobile-location-inset) - var(--page-right-inset))); }
+  body.page-case .case-footer .footer-email { position:static; margin-inline-start:auto; }
   body[class]:not(.page-case) > footer { left:var(--gutter); }
   body.page-about .about-main .approach-link { position:static; margin:0; }
   html:has(> body.page-about), html:has(> body.page-idea) { height:auto; overflow:auto; }
@@ -51,11 +62,15 @@ body[class] > .skip { position:absolute; top:0; left:0; z-index:30; }
 @media (max-width:800px) {
   body.page-about .about-main .approach-link { position:fixed; inset:auto auto var(--footer-baseline) var(--gutter); margin:0; }
 }
-/* One shared type size for the footer signature and process link. */
+/* Match footer signatures to the header email. */
 body[class]:not(.page-case) > footer .frame-signature,
 body[class]:not(.page-case) > footer.frame-signature,
-body.page-about .about-main .approach-link,
-body.page-case .case-footer > a:first-child {
+body[class] .case-footer > a:first-child {
+  font: 700 var(--header-email-size)/1.25 var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
+}
+body.page-about .about-main .approach-link {
   font: 700 12px/1.25 var(--font-body);
   letter-spacing: 0;
   text-transform: none;
@@ -78,10 +93,8 @@ body.page-case .case-copy .case-intro { grid-template-columns:minmax(0,1fr); gap
 body.page-case .case-intro > *, body.page-case .case-facts { grid-column:1; }
 body.page-case .case-facts > div { grid-template-columns:minmax(0,1fr); gap:.35rem; }
 body.page-case .case-copy, body.page-case .case-section-copy, body.page-case .cta, body.page-case .case-footer { text-align:left; }
-body[class] > .site-header .header-inquiry { left:auto; right:5.4166667vw; text-align:right; }
 @media (max-width:800px) {
   body.page-case .case-main { padding-inline:var(--gutter); }
-  body[class] > .site-header .header-inquiry { left:auto; right:var(--gutter); }
 }
 /* Mobile header from Figma node 179:72, designed at 390px wide. */
 @media (max-width:800px) {
@@ -93,9 +106,8 @@ body[class] > .site-header .header-inquiry { left:auto; right:5.4166667vw; text-
   body[class] > .site-header nav a { display:block; height:10.5px; line-height:23px; margin:0; padding:0; transform:none; }
   body[class] > .site-header nav a[aria-current] { padding-left:0; }
   body[class] > .site-header nav a[aria-current]::before { content:none; }
-  body[class] > .site-header .header-location { left:auto; right:6.1538462vw; top:18px; padding:0; text-align:right; font-size:12px; line-height:normal; }
+  body[class] > .site-header .header-location { left:auto; right:var(--mobile-location-inset); top:18px; padding:0; text-align:right; font-size:12px; line-height:normal; }
   body[class] > .site-header .clock { position:static; margin:0; font-size:12px; font-weight:500; line-height:1.35; color:var(--muted); }
-  body[class] > .site-header .header-inquiry { display:none; }
 }
 body[class] > header.site-header.wrap { width:100vw; }
 /* End mobile About directly after the portrait. */
