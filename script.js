@@ -107,95 +107,170 @@ if (ideaBoard) {
   const tiles = ideaBoard.querySelectorAll('.idea-tile');
   const cube = ideaBoard.querySelector('.idea-cube');
   const cubeFaces = [...cube.querySelectorAll('.idea-cube-face')];
-  const cubeSlice = document.createElement('div');
-  cubeSlice.className = 'idea-cube-slice';
-  cubeSlice.setAttribute('aria-hidden', 'true');
-  cubeSlice.inert = true;
-  cube.append(cubeSlice);
   const reducedCubeMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const canAnimateCube = typeof cube.animate === 'function';
-  const faceCopies = new WeakMap();
-  // The reference loop is 198 frames at 25 fps. Its turns land nine frames apart.
-  const referenceTurns = ['x+', 'y+', 'y-', 'x+', 'y-', 'z+', 'x+', 'y-', 'y+', 'z-', 'y-',
-    'x-', 'x+', 'y-', 'z+', 'x-', 'x+', 'y+', 'y-', 'x-', 'z+', 'x+'];
-  const sliceTurnDuration = 270;
-  const sliceAxes = {
-    x: { end: [3, 1], edges: ['right', null, 'left', null, 'right', 'right'] },
-    y: { end: [4, 5], edges: ['bottom', 'bottom', 'bottom', 'bottom', null, null] },
-    z: { end: [2, 0], edges: [null, 'left', null, 'right', 'bottom', 'top'] },
-  };
-  const oppositeEdges = { left: 'right', right: 'left', top: 'bottom', bottom: 'top' };
-  const cut = (edge, amount) => 'inset(' + ['top', 'right', 'bottom', 'left']
-    .map(side => side === edge ? amount : '0').join(' ') + ')';
-  let sliceAnimation;
-  let lastTurn = -1;
+  const canTwistCube = canAnimateCube && typeof cube.getAnimations === 'function' &&
+    typeof DOMMatrix === 'function' && typeof DOMPoint === 'function';
+  // 198 frames at 25 fps, with a layer turn every nine frames.
+  const openingTurns = [
+    [0, 1, 1], [1, 1, 1], [1, 0, -1], [0, -1, 1], [2, 1, -1], [0, 1, -1],
+    [1, -1, 1], [2, -1, 1], [0, 0, -1], [1, 1, -1], [2, 1, 1],
+  ];
+  const referenceTurns = openingTurns.concat([...openingTurns].reverse().map(([axis, layer, direction]) => [axis, layer, -direction]));
+  const turnInterval = 360;
+  const turnLead = 40;
+  const turnDuration = 260;
+  let clearCubeTwist = () => {};
+  let refreshCubeArtwork = () => {};
 
-  function clearCubeTwist() {
-    sliceAnimation?.cancel();
-    sliceAnimation = undefined;
-    cube.removeAttribute('data-twisting');
-  }
+  if (canTwistCube) {
+    const puzzle = document.createElement('div');
+    const rotor = document.createElement('div');
+    puzzle.className = 'idea-cube-puzzle';
+    rotor.className = 'idea-cube-rotor';
+    puzzle.setAttribute('aria-hidden', 'true');
+    puzzle.append(rotor);
+    cube.append(puzzle);
+    const pieces = [];
+    const surfaces = [
+      ['front', ([x, y, z]) => [z, x, y]],
+      ['right', ([x, y, z]) => [x, -z, y]],
+      ['back', ([x, y, z]) => [-z, -x, y]],
+      ['left', ([x, y, z]) => [-x, z, y]],
+      ['top', ([x, y, z]) => [-y, x, z]],
+      ['bottom', ([x, y, z]) => [y, x, -z]],
+    ];
+    const stickers = surfaces.map(() => []);
+    const images = surfaces.map(() => '');
+    let lastTurn = -1;
+    let activeTurn;
 
-  function updateCubeTwist() {
-    requestAnimationFrame(updateCubeTwist);
-    if (document.hidden || reducedCubeMotion.matches || cube.contains(document.activeElement) ||
-      cube.hasAttribute('data-selecting')) {
-      if (sliceAnimation) clearCubeTwist();
-      lastTurn = -1;
-      return;
+    function positionPiece(piece) {
+      const [x, y, z] = piece.position;
+      piece.element.style.transform = 'translate3d(calc(var(--piece-step) * ' + x +
+        '), calc(var(--piece-step) * ' + y + '), calc(var(--piece-step) * ' + z + ')) ' +
+        piece.orientation.toString();
     }
 
-    const rotation = cube.getAnimations().find(animation => animation.animationName === 'idea-cube-rotate');
-    if (!rotation || typeof rotation.currentTime !== 'number') return;
-    const loopTime = referenceTurns.length * 360;
-    const timeScale = rotation.effect.getComputedTiming().duration / loopTime;
-    const time = rotation.currentTime / timeScale;
-    const frame = Math.floor(time / 40);
-    const turn = Math.floor(frame / 9);
-    const offset = time - turn * 360 - 40;
-    if (turn === lastTurn || offset < 0 || offset >= sliceTurnDuration) return;
-    lastTurn = turn;
+    for (const x of [-1, 0, 1]) for (const y of [-1, 0, 1]) for (const z of [-1, 0, 1]) {
+      const element = document.createElement('div');
+      element.className = 'idea-cube-piece';
+      const origin = [x, y, z];
+      surfaces.forEach(([name, coordinates], faceIndex) => {
+        const face = document.createElement('span');
+        face.className = 'idea-cube-piece-face idea-cube-face--' + name;
+        const [outer, column, row] = coordinates(origin);
+        if (outer === 1) {
+          face.classList.add('idea-cube-sticker');
+          face.style.backgroundPosition = ((column + 1) * 50) + '% ' + ((row + 1) * 50) + '%';
+          stickers[faceIndex].push(face);
+        }
+        element.append(face);
+      });
+      const piece = { element, origin, position: origin, orientation: new DOMMatrix() };
+      positionPiece(piece);
+      pieces.push(piece);
+      puzzle.append(element);
+    }
 
-    const [axis, sign] = referenceTurns[turn % referenceTurns.length];
-    const direction = sign === '+' ? 1 : -1;
-    const { end, edges } = sliceAxes[axis];
-    const endFace = end[direction === 1 ? 1 : 0];
-    const strips = [];
+    refreshCubeArtwork = () => {
+      cubeFaces.forEach((face, index) => {
+        const image = face.querySelector('img').src;
+        if (image === images[index]) return;
+        images[index] = image;
+        for (const sticker of stickers[index]) sticker.style.backgroundImage = 'url("' + image + '")';
+      });
+    };
+    refreshCubeArtwork();
 
-    cubeFaces.forEach((face, index) => {
-      const edge = direction === 1 ? edges[index] : oppositeEdges[edges[index]];
-      face.style.setProperty('--body-clip', edge ? cut(edge, '33.3333%')
-        : index === endFace ? 'inset(50%)' : 'none');
-      if (!edge && index !== endFace) return;
-      let strip = faceCopies.get(face.firstElementChild);
-      if (!strip || strip.className !== face.className) {
-        strip = face.cloneNode(true);
-        faceCopies.set(face.firstElementChild, strip);
+    function commitTurn(turn) {
+      const [axis, layer, direction] = referenceTurns[turn % referenceTurns.length];
+      const angles = [0, 0, 0];
+      angles[axis] = direction * 90;
+      const matrix = new DOMMatrix().rotate(...angles);
+      for (const piece of pieces) {
+        if (piece.position[axis] !== layer) continue;
+        const point = matrix.transformPoint(new DOMPoint(...piece.position));
+        piece.position = [Math.round(point.x), Math.round(point.y), Math.round(point.z)];
+        piece.orientation = matrix.multiply(piece.orientation);
+        positionPiece(piece);
+        puzzle.append(piece.element);
       }
-      strip.style.clipPath = edge ? cut(oppositeEdges[edge], '66.6667%') : 'none';
-      strips.push(strip);
-    });
+    }
 
-    const seam = 'calc(var(--cube-size) / ' + (direction * 6) + ')';
-    const cap = axis === 'x' ? 'translateX(' + seam + ') rotateY(90deg)'
-      : axis === 'y' ? 'translateY(' + seam + ') rotateX(90deg)'
-      : 'translateZ(' + seam + ')';
-    cube.style.setProperty('--slice-cap', cap);
-    cube.style.setProperty('--slice-normal', axis === 'y' ? -direction : direction);
-    cubeSlice.replaceChildren(...strips);
-    cube.setAttribute('data-twisting', '');
+    function finishTurn() {
+      if (!activeTurn) return;
+      const { animation, turn } = activeTurn;
+      activeTurn = undefined;
+      animation.cancel();
+      commitTurn(turn);
+    }
 
-    const rotate = angle => 'rotate' + axis.toUpperCase() + '(' + angle + 'deg)';
-    sliceAnimation = cubeSlice.animate([
-      { transform: rotate(0), easing: 'cubic-bezier(.55, 0, .45, 1)' },
-      { transform: rotate(direction * 89), offset: .78 },
-      { transform: rotate(direction * 90) },
-    ], sliceTurnDuration * timeScale);
-    sliceAnimation.currentTime = offset * timeScale;
-    sliceAnimation.onfinish = clearCubeTwist;
+    function resetPuzzle() {
+      if (activeTurn) {
+        activeTurn.animation.cancel();
+        activeTurn = undefined;
+      }
+      for (const piece of pieces) {
+        piece.position = piece.origin;
+        piece.orientation = new DOMMatrix();
+        positionPiece(piece);
+        puzzle.append(piece.element);
+      }
+      lastTurn = -1;
+    }
+
+    clearCubeTwist = () => {
+      cube.removeAttribute('data-puzzle-active');
+      if (lastTurn >= 0) resetPuzzle();
+    };
+
+    function updateCubeTwist() {
+      requestAnimationFrame(updateCubeTwist);
+      if (document.hidden || reducedCubeMotion.matches || cube.contains(document.activeElement) ||
+        cube.hasAttribute('data-selecting')) {
+        clearCubeTwist();
+        return;
+      }
+
+      const rotation = cube.getAnimations().find(animation => animation.animationName === 'idea-cube-rotate');
+      if (!rotation || typeof rotation.currentTime !== 'number') return;
+      cube.toggleAttribute('data-puzzle-active', true);
+      const loopTime = referenceTurns.length * turnInterval;
+      const scale = rotation.effect.getComputedTiming().duration / loopTime;
+      const time = rotation.currentTime / scale;
+      const turn = Math.floor(time / turnInterval);
+      const offset = time - turn * turnInterval - turnLead;
+      if (offset < 0 || turn === lastTurn) return;
+
+      finishTurn();
+      // Each full cycle restores the starting arrangement, including after a skipped frame.
+      if (turn - lastTurn > referenceTurns.length) {
+        resetPuzzle();
+        lastTurn = turn - turn % referenceTurns.length - 1;
+      }
+      for (let missed = lastTurn + 1; missed < turn; missed++) commitTurn(missed);
+      lastTurn = turn;
+      if (offset >= turnDuration) {
+        commitTurn(turn);
+        return;
+      }
+      const [axis, layer, direction] = referenceTurns[turn % referenceTurns.length];
+      for (const piece of pieces) {
+        if (piece.position[axis] === layer) rotor.append(piece.element);
+      }
+      const rotate = angle => 'rotate' + 'XYZ'[axis] + '(' + angle + 'deg)';
+      const animation = rotor.animate([
+        { transform: rotate(0), easing: 'cubic-bezier(.55, 0, .4, 1)' },
+        { transform: rotate(direction * 90) },
+      ], turnDuration * scale);
+      animation.currentTime = offset * scale;
+      activeTurn = { animation, turn };
+      animation.onfinish = finishTurn;
+    }
+
+    requestAnimationFrame(updateCubeTwist);
   }
-
-  if (canAnimateCube && typeof cube.getAnimations === 'function') requestAnimationFrame(updateCubeTwist);
   const spareTiles = [...ideaBoard.querySelector('.idea-cube-artworks').content.querySelectorAll('.idea-tile')]
     .map(tile => document.adoptNode(tile));
   for (const tile of [...tiles, ...spareTiles]) {
@@ -292,12 +367,13 @@ if (ideaBoard) {
           facingArtwork = face.element.firstElementChild.dataset.artwork;
         }
         if (depth > .35) face.wasVisible = true;
-        if (depth > -.35 || !face.wasVisible || !queue.length || cube.dataset.twisting) return;
+        if (depth > -.35 || !face.wasVisible || !queue.length) return;
 
         // Swap only after an outward-facing artwork has turned fully away.
         const outgoing = face.element.firstElementChild;
         face.element.replaceChildren(queue.shift());
         queue.push(outgoing);
+        refreshCubeArtwork();
         face.wasVisible = false;
       });
       highlightProject(projectButtons.get(facingArtwork));
@@ -351,6 +427,7 @@ if (ideaBoard) {
         const front = cubeFaces[0];
         queue.splice(queue.indexOf(tile), 1, front.firstElementChild);
         front.replaceChildren(tile);
+        refreshCubeArtwork();
         faceIndex = 0;
       }
 
