@@ -16,15 +16,38 @@ aboutField.className = 'about-character-field';
 aboutField.dataset.nodeId = '190:40285';
 const aboutBytes = atob(aboutGlyphData);
 const aboutGlyphs = document.createDocumentFragment();
+const glyphSpacing = 24;
+const occupiedGlyphCells = new Set();
+function appendAboutGlyph(x, y, size, opacity, character, isExtension = false) {
+  const glyph = document.createElement('span');
+  glyph.textContent = character;
+  glyph.style.cssText = `left:${x}px;top:${y}px;font-size:${size}px;opacity:${opacity};width:${size * .96875}px;line-height:${size * .926}px`;
+  if (isExtension) glyph.setAttribute('data-background-extension', '');
+  aboutGlyphs.append(glyph);
+}
+
 for (let i = 0; i < aboutBytes.length; i += 8) {
   const read = offset => aboutBytes.charCodeAt(i + offset);
   const x = (read(0) | read(1) << 8) / 10;
   const y = (read(2) | read(3) << 8) / 10;
   const size = (read(4) | read(5) << 8) / 100;
-  const glyph = document.createElement('span');
-  glyph.textContent = String.fromCharCode(read(7));
-  glyph.style.cssText = `left:${x}px;top:${y}px;font-size:${size}px;opacity:${read(6) / 100};width:${size * .96875}px;line-height:${size * .926}px`;
-  aboutGlyphs.append(glyph);
+  occupiedGlyphCells.add(`${Math.floor(x / glyphSpacing)},${Math.floor(y / glyphSpacing)}`);
+  appendAboutGlyph(x, y, size, read(6) / 100, String.fromCharCode(read(7)));
+}
+
+// Continue the same character field past the viewport so motion keeps the edges covered.
+const fieldColumns = Math.ceil(1822.25 / glyphSpacing);
+const fieldRows = Math.ceil(1689.05 / glyphSpacing);
+const fieldBleed = 3;
+for (let row = -fieldBleed; row < fieldRows + fieldBleed; row++) {
+  for (let column = -fieldBleed; column < fieldColumns + fieldBleed; column++) {
+    if (occupiedGlyphCells.has(`${column},${row}`)) continue;
+    const sample = ((row + fieldBleed) * (fieldColumns + 2 * fieldBleed) + column + fieldBleed) * 53;
+    const character = aboutBytes.charAt((sample % (aboutBytes.length / 8)) * 8 + 7);
+    const x = (column + .25 + (sample % 17) / 34) * glyphSpacing;
+    const y = (row + .25 + (sample % 13) / 26) * glyphSpacing;
+    appendAboutGlyph(x, y, 11 + sample % 5, .3 + (sample % 9) * .03, character, true);
+  }
 }
 aboutField.append(aboutGlyphs);
 aboutLayout.append(aboutField);

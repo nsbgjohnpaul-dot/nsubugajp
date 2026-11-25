@@ -101,11 +101,6 @@ body[class] > .about-background-stage {
   inset:0;
   pointer-events:none;
   overflow:hidden;
-  background-image:radial-gradient(circle, rgb(0 0 0 / .13) 0 .65px, transparent .95px);
-  background-size:4px 4px;
-}
-body[class].theme-dark > .about-background-stage {
-  background-image:radial-gradient(circle, rgb(255 255 255 / .14) 0 .65px, transparent .95px);
 }
 .about-background-layout { position:absolute; top:0; left:0; width:1822.25px; height:1689.05px; transform-origin:top left; }
 .about-character-field { position:absolute; inset:0; color:rgba(192,192,192,.5); font-family:'DM Mono',monospace; font-weight:500; }

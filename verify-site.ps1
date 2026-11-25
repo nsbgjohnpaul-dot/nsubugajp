@@ -84,7 +84,7 @@ try {
   $reference=$null
   foreach($page in @('index.html','work.html','about.html','idea-box.html','contact.html','body-and-soil.html')) {
     Visit $page
-    Assert (Js 'document.querySelectorAll(".about-background-stage").length===1 && document.querySelectorAll(".about-character-field span").length===8000') "Shared background loads on $page"
+    Assert (Js 'document.querySelectorAll(".about-background-stage").length===1 && document.querySelectorAll(".about-character-field span:not([data-background-extension])").length===8000 && !!document.querySelector(".about-character-field [data-background-extension]")') "Shared background and edge extension load on $page"
     $positions=Js 'JSON.stringify([".audio-indicator",".site-header nav",".header-location"].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [Math.round(r.x*10)/10,Math.round(r.y*10)/10]}))'
     if(!$reference){$reference=$positions}
     Assert ($positions -eq $reference) "Header anchors match on $page"
