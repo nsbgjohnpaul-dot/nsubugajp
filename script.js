@@ -101,6 +101,7 @@ if (ideaBoard) {
     '06': ['Cista', 'A spirits label exploration with botanical artwork and a warm product setting.'],
     '07': ['Cista', 'A botanical label and bottle study styled with natural materials.'],
     '08': ['Catpuccino', 'A playful café website concept built around an illustrated cat identity.'],
+    '09': ['Kakira Rum', 'A social campaign artwork featuring three Kakira Rum bottles.'],
   };
   const projectList = document.querySelector('.idea-project-list');
   const tiles = ideaBoard.querySelectorAll('.idea-tile');
@@ -305,7 +306,7 @@ if (ideaBoard) {
   const allTiles = [...tiles, ...spareTiles].sort((a, b) => a.dataset.artwork.localeCompare(b.dataset.artwork));
   const editions = { '01': 'Smoke Study', '03': 'Label Detail', '05': 'Studio Light', '06': 'Label Study', '07': 'Bottle Study' };
 
-  const wheelTiles = [...allTiles, ...allTiles.slice(0, 4)];
+  const wheelTiles = Array.from({ length: Math.max(12, allTiles.length) }, (_, index) => allTiles[index % allTiles.length]);
   const cycleCount = 5;
   const middleCycle = Math.floor(cycleCount / 2);
   const loopTiles = Array.from({ length: cycleCount }, () => wheelTiles).flat();

@@ -271,6 +271,7 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 }
 
 .page-idea .idea-cube-face .idea-tile img { object-fit: cover; }
+.page-idea .idea-cube-face .idea-tile[data-artwork="09"] img { object-fit: contain; }
 
 .idea-cube-grid {
   position: absolute;
