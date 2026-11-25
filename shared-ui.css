@@ -3,6 +3,12 @@ body[class] { --header-space:clamp(8.5rem,17svh,11rem); --footer-baseline:7svh; 
 body.page-about { --header-space:10.78125vw; }
 body.page-idea { --header-space:8.4895833vw; }
 body.page-case { --header-space:clamp(9rem,10vw,12rem); }
+@supports not (height: 1svh) {
+  body[class] { --footer-baseline:7vh; }
+  @media (min-width: 801px) {
+    body[class]:not(.page-about, .page-idea, .page-case) { --header-space:clamp(8.5rem,17vh,11rem); }
+  }
+}
 body[class] > header.site-header.wrap { position:fixed; z-index:20; inset:0 0 auto; display:block; width:100%; max-width:none; height:145px; min-height:0; max-height:none; padding:0; margin:0; flex:none; pointer-events:none; }
 body[class] > .site-header > * { pointer-events:auto; }
 body[class] > .site-header .audio-indicator { position:absolute; left:5.4166667vw; top:clamp(1.75rem,2.8645833vw,3.4375rem); display:flex; align-items:center; gap:5px; padding:0; border:0; width:auto; text-align:left; font:600 clamp(10px,.7291667vw,14px)/23px var(--font-body); color:var(--muted); background:none; cursor:pointer; }

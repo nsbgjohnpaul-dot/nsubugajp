@@ -217,6 +217,7 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
   position: absolute;
   inset: 0;
   background: #1e1e1e;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transform: var(--face-rotation) translateZ(var(--cube-depth));
 }
@@ -330,7 +331,8 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 .page-idea .idea-project {
   --wheel-row: clamp(3.5rem, 9svh, 5.25rem);
   container-type: size;
-  overflow: hidden auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   scrollbar-width: none;
   overscroll-behavior-y: contain;
   overflow-anchor: none;
@@ -405,6 +407,7 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 
   .page-idea .idea-project {
     order: 2;
+    height: min(25rem, 55vh);
     height: min(25rem, 55svh);
     margin-inline-end: calc(-1 * var(--page-right-inset));
   }
@@ -414,12 +417,26 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 @media (min-width: 801px) {
   .page-idea .idea-project {
     --wheel-row: 8svh;
-    mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    --wheel-gradient: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    --wheel-fade: var(--wheel-gradient);
+    -webkit-mask-image: var(--wheel-fade);
+    mask-image: var(--wheel-fade);
   }
 
-  .page-idea .idea-project:has(:focus-visible) { mask-image: none; }
+  .page-idea .idea-project:focus-within { --wheel-fade: none; }
+  .page-idea .idea-project:focus-within:not(:has(:focus-visible)) { --wheel-fade: var(--wheel-gradient); }
 }
 
+@supports not (height: 1svh) {
+  .idea-cube-stage { --cube-size: clamp(4.5rem, min(37vw, 30.5vh), 19.25rem); }
+  .page-idea .idea-project { --wheel-row: clamp(3.5rem, 9vh, 5.25rem); }
+  @media (min-width: 801px) {
+    .page-idea .idea-project { --wheel-row: 8vh; }
+  }
+  @media (max-width: 800px) {
+    .page-idea .idea-cube-stage { --cube-size: clamp(4.5rem, min(37.5vw, 23.5vh), 15rem); }
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .idea-project-list button { transform: none; }
 }

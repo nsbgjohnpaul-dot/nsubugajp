@@ -123,8 +123,10 @@
   gallery.addEventListener('pointercancel', finishDrag);
   gallery.addEventListener('lostpointercapture', event => { if (drag) finishDrag(event); });
   cards.forEach(card => card.querySelector('.work-artwork').addEventListener('click', event => { if (suppressClick) event.preventDefault(); }));
-  new ResizeObserver(resize).observe(stage);
-  reduceMotion.addEventListener('change', render);
+  if (typeof ResizeObserver === 'function') new ResizeObserver(resize).observe(stage);
+  else window.addEventListener('resize', resize);
+  if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', render);
+  else reduceMotion.addListener(render);
   const autoplayDelay = 2000;
   setInterval(() => {
     if (reduceMotion.matches || document.hidden || drag || gallery.matches(':focus-within') || stage.matches(':hover')) return;

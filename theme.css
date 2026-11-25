@@ -5,7 +5,7 @@ body[class] {
   --ink:#1e1e1e;
   --muted:#1e1e1eb3;
   --line:#1e1e1e33;
-  --card:color-mix(in srgb, var(--ink) 5%, var(--paper));
+  --card:#cdcdcc;
   --accent:#b03a1e;
 }
 
@@ -16,8 +16,13 @@ body[class].theme-dark {
   --ink:#d4d4d4;
   --muted:#d4d4d4a6;
   --line:#d4d4d433;
-  --card:color-mix(in srgb, var(--ink) 6%, var(--paper));
+  --card:#292929;
   --accent:#e06a4a;
+}
+
+@supports (background: color-mix(in srgb, black, white)) {
+  body[class] { --card:color-mix(in srgb, var(--ink) 5%, var(--paper)); }
+  body[class].theme-dark { --card:color-mix(in srgb, var(--ink) 6%, var(--paper)); }
 }
 
 body[class],

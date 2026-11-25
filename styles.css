@@ -871,6 +871,7 @@ body.page-contact .contact-copy { transform: translateY(-3.75rem); }
 /* Single-screen portfolio pages; case studies retain document scrolling. */
 body:is(.page-home, .page-work, .page-about, .page-idea, .page-contact) {
   --gutter: clamp(1.25rem, 5vw, 6rem);
+  height: 100vh;
   height: 100svh;
   min-height: 0;
   overflow: hidden;

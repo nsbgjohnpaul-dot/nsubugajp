@@ -8,6 +8,7 @@ const clockFormat = new Intl.DateTimeFormat('en-GB', {
 
 function updateClock() {
   const time = clockFormat.format(new Date());
+  if (clock.dateTime === `${time}+03:00`) return;
   clock.textContent = `EAT ${time}`;
   clock.dateTime = `${time}+03:00`;
 }
@@ -62,8 +63,9 @@ document.addEventListener('click', event => {
 // Keep About on one screen while retaining the detailed process content.
 const approachLink = document.querySelector('.about-main .approach-link');
 const processSection = document.querySelector('.about-main .process');
-if (approachLink && processSection) {
-  const dialog = document.createElement('dialog');
+const approachDialog = document.createElement('dialog');
+if (approachLink && processSection && typeof approachDialog.showModal === 'function') {
+  const dialog = approachDialog;
   dialog.className = 'approach-dialog';
   dialog.setAttribute('aria-label', 'Approach and process');
   const closeButton = document.createElement('button');
@@ -84,6 +86,8 @@ if (approachLink && processSection) {
   });
   closeButton.addEventListener('click', () => dialog.close());
   if (location.hash === '#approach') dialog.showModal();
+} else if (approachLink && processSection) {
+  document.documentElement.classList.add('about-inline-process');
 }
 
 const ideaBoard = document.querySelector('.idea-board');
@@ -108,6 +112,8 @@ if (ideaBoard) {
   cubeSlice.inert = true;
   cube.append(cubeSlice);
   const reducedCubeMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const canAnimateCube = typeof cube.animate === 'function';
+  const faceCopies = new WeakMap();
   // The reference loop is 198 frames at 25 fps. Its turns land nine frames apart.
   const referenceTurns = ['x+', 'y+', 'y-', 'x+', 'y-', 'z+', 'x+', 'y-', 'y+', 'z-', 'y-',
     'x-', 'x+', 'y-', 'z+', 'x-', 'x+', 'y+', 'y-', 'x-', 'z+', 'x+'];
@@ -131,14 +137,15 @@ if (ideaBoard) {
 
   function updateCubeTwist() {
     requestAnimationFrame(updateCubeTwist);
-    const rotation = cube.getAnimations().find(animation => animation.animationName === 'idea-cube-rotate');
-    if (document.hidden || reducedCubeMotion.matches || !rotation || cube.contains(document.activeElement)) {
+    if (document.hidden || reducedCubeMotion.matches || cube.contains(document.activeElement) ||
+      cube.hasAttribute('data-selecting')) {
       if (sliceAnimation) clearCubeTwist();
       lastTurn = -1;
       return;
     }
 
-    if (rotation.currentTime === null) return;
+    const rotation = cube.getAnimations().find(animation => animation.animationName === 'idea-cube-rotate');
+    if (!rotation || typeof rotation.currentTime !== 'number') return;
     const loopTime = referenceTurns.length * 360;
     const timeScale = rotation.effect.getComputedTiming().duration / loopTime;
     const time = rotation.currentTime / timeScale;
@@ -159,7 +166,11 @@ if (ideaBoard) {
       face.style.setProperty('--body-clip', edge ? cut(edge, '33.3333%')
         : index === endFace ? 'inset(50%)' : 'none');
       if (!edge && index !== endFace) return;
-      const strip = face.cloneNode(true);
+      let strip = faceCopies.get(face.firstElementChild);
+      if (!strip || strip.className !== face.className) {
+        strip = face.cloneNode(true);
+        faceCopies.set(face.firstElementChild, strip);
+      }
       strip.style.clipPath = edge ? cut(oppositeEdges[edge], '66.6667%') : 'none';
       strips.push(strip);
     });
@@ -182,7 +193,7 @@ if (ideaBoard) {
     sliceAnimation.onfinish = clearCubeTwist;
   }
 
-  requestAnimationFrame(updateCubeTwist);
+  if (canAnimateCube && typeof cube.getAnimations === 'function') requestAnimationFrame(updateCubeTwist);
   const spareTiles = [...ideaBoard.querySelector('.idea-cube-artworks').content.querySelectorAll('.idea-tile')]
     .map(tile => document.adoptNode(tile));
   for (const tile of [...tiles, ...spareTiles]) {
@@ -201,6 +212,9 @@ if (ideaBoard) {
   let wheelCycleHeight = 0;
   let wheelTarget = null;
   let wheelFrame = 0;
+  let lastWheelFrameTime = 0;
+  let wheelRows = [];
+  let wheelUpdateFrame = 0;
   let centeredProject;
   let selectionAnimation;
   let resumeTimer;
@@ -229,9 +243,9 @@ if (ideaBoard) {
     }
     let nearest;
     let nearestDistance = Infinity;
-    for (const item of projectList.children) {
-      const distance = item.offsetTop + item.offsetHeight / 2 - center;
-      if (Math.abs(distance) > radius + item.offsetHeight) continue;
+    for (const { item, middle, height } of wheelRows) {
+      const distance = middle - center;
+      if (Math.abs(distance) > radius + height) continue;
       const angle = Math.max(-1, Math.min(1, distance / radius)) * .58;
       const inset = (1 - Math.cos(angle)) * Math.min(radius, projectWheel.clientWidth);
       item.style.setProperty('--wheel-inset', inset + 'px');
@@ -248,7 +262,7 @@ if (ideaBoard) {
     }
   }
 
-  if (cube) {
+  if (typeof DOMMatrixReadOnly === 'function') {
     const faces = [
       ['front', matrix => matrix.m33],
       ['right', matrix => matrix.m13],
@@ -323,7 +337,7 @@ if (ideaBoard) {
       wheelTarget = null;
       projectWheel.scrollTo({
         top: item.offsetTop + (item.offsetHeight - projectWheel.clientHeight) / 2,
-        behavior: reducedCubeMotion.matches ? 'instant' : 'smooth',
+        behavior: reducedCubeMotion.matches ? 'auto' : 'smooth',
       });
       const from = getComputedStyle(cube).transform;
       clearTimeout(resumeTimer);
@@ -344,18 +358,22 @@ if (ideaBoard) {
       cube.style.setProperty('--cube-y', y + 'deg');
       cube.style.setProperty('--cube-z', '0deg');
       const to = 'rotateX(' + x + 'deg) rotateY(' + y + 'deg) rotateZ(0deg)';
-      const duration = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 750;
-      selectionAnimation = cube.animate([{ transform: from }, { transform: to }], {
-        duration,
-        easing: 'ease-in-out',
-        fill: 'forwards',
-      });
-      selectionAnimation.onfinish = () => {
+      const resumeCube = () => {
         resumeTimer = setTimeout(() => {
-          selectionAnimation.cancel();
+          selectionAnimation?.cancel();
           cube.removeAttribute('data-selecting');
         }, 2200);
       };
+      if (!canAnimateCube || reducedCubeMotion.matches) {
+        resumeCube();
+        return;
+      }
+      selectionAnimation = cube.animate([{ transform: from }, { transform: to }], {
+        duration: 750,
+        easing: 'ease-in-out',
+        fill: 'forwards',
+      });
+      selectionAnimation.onfinish = resumeCube;
     }
 
     if (isMiddleCycle && cycleIndex < allTiles.length) {
@@ -370,16 +388,23 @@ if (ideaBoard) {
   const firstMiddleItem = projectList.children[middleCycle * wheelTiles.length];
   const firstNextItem = projectList.children[(middleCycle + 1) * wheelTiles.length];
   function measureProjectWheel() {
+    wheelRows = Array.from(projectList.children, item => {
+      const height = item.offsetHeight;
+      return { item, height, middle: item.offsetTop + height / 2 };
+    });
     wheelCycleStart = firstMiddleItem.offsetTop;
     wheelCycleHeight = firstNextItem.offsetTop - wheelCycleStart;
     updateProjectWheel();
   }
 
-  function glideProjectWheel() {
+  function glideProjectWheel(now) {
     wheelFrame = 0;
     if (wheelTarget === null) return;
+    const elapsed = lastWheelFrameTime ? Math.min(now - lastWheelFrameTime, 50) : 1000 / 60;
+    lastWheelFrameTime = now;
+    const easing = 1 - Math.pow(.8, elapsed / (1000 / 60));
     const remaining = wheelTarget - projectWheel.scrollTop;
-    projectWheel.scrollTop = Math.abs(remaining) < 4 ? wheelTarget : projectWheel.scrollTop + remaining * .2;
+    projectWheel.scrollTop = Math.abs(remaining) < 4 ? wheelTarget : projectWheel.scrollTop + remaining * easing;
     updateProjectWheel();
     if (Math.abs(remaining) >= 4) wheelFrame = requestAnimationFrame(glideProjectWheel);
     else wheelTarget = null;
@@ -392,16 +417,29 @@ if (ideaBoard) {
     const delta = Math.max(-projectWheel.clientHeight, Math.min(projectWheel.clientHeight, event.deltaY * unit));
     wheelTarget = Math.max(0, Math.min(projectWheel.scrollHeight - projectWheel.clientHeight,
       (wheelTarget ?? projectWheel.scrollTop) + delta));
-    if (!wheelFrame) wheelFrame = requestAnimationFrame(glideProjectWheel);
+    if (!wheelFrame) {
+      lastWheelFrameTime = 0;
+      wheelFrame = requestAnimationFrame(glideProjectWheel);
+    }
   }, { passive: false });
 
   const openingIndex = matchMedia('(min-width: 801px)').matches ? Math.floor((wheelTiles.length - 1) / 2) : 0;
   const openingItem = projectList.children[middleCycle * wheelTiles.length + openingIndex];
   projectWheel.scrollTop = openingItem.offsetTop + (openingItem.offsetHeight - projectWheel.clientHeight) / 2;
-  projectWheel.addEventListener('scroll', updateProjectWheel, { passive: true });
-  const wheelResize = new ResizeObserver(measureProjectWheel);
-  wheelResize.observe(projectWheel);
-  wheelResize.observe(projectList);
+  projectWheel.addEventListener('scroll', () => {
+    if (wheelFrame || wheelUpdateFrame) return;
+    wheelUpdateFrame = requestAnimationFrame(() => {
+      wheelUpdateFrame = 0;
+      updateProjectWheel();
+    });
+  }, { passive: true });
+  if (typeof ResizeObserver === 'function') {
+    const wheelResize = new ResizeObserver(measureProjectWheel);
+    wheelResize.observe(projectWheel);
+    wheelResize.observe(projectList);
+  } else {
+    window.addEventListener('resize', measureProjectWheel);
+  }
   measureProjectWheel();
 }
 

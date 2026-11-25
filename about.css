@@ -157,3 +157,9 @@ body.page-about > .about-background-stage { position: absolute; z-index: 0; left
 .page-about .approach-dialog .process-illustration { aspect-ratio:469 / 380; }
 .page-about .approach-dialog .process-illustration > svg { width:90%; height:auto; aspect-ratio:469 / 422; }
 .page-about .approach-dialog .process-illustration > svg > svg { width:revert; height:revert; aspect-ratio:auto; }
+html.about-inline-process,
+html.about-inline-process > body.page-about {
+  height: auto;
+  overflow-y: auto;
+}
+

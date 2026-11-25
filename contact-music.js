@@ -3,7 +3,8 @@ const musicDialog = document.querySelector('.contact-music-dialog');
 const playlistFrame = musicDialog.querySelector('iframe');
 
 playLink.addEventListener('click', event => {
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
+    typeof musicDialog.showModal !== 'function') return;
   event.preventDefault();
   musicDialog.showModal();
 
