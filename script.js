@@ -104,6 +104,7 @@ if (ideaBoard) {
     '09': ['Kakira Rum', 'A social campaign artwork featuring three Kakira Rum bottles.'],
   };
   const projectList = document.querySelector('.idea-project-list');
+  const kakiraPreview = document.querySelector('#kakira-rum-preview');
   const tiles = ideaBoard.querySelectorAll('.idea-tile');
   const cube = ideaBoard.querySelector('.idea-cube');
   const cubeFaces = [...cube.querySelectorAll('.idea-cube-face')];
@@ -377,13 +378,24 @@ if (ideaBoard) {
       selectionAnimation.onfinish = resumeCube;
     }
 
+    function selectArtwork() {
+      turnToArtwork();
+      if (id !== '09') return;
+      if (typeof kakiraPreview.showModal === 'function') kakiraPreview.showModal();
+      else location.assign(kakiraPreview.querySelector('img').src);
+    }
+
+    if (id === '09') {
+      button.setAttribute('aria-haspopup', 'dialog');
+      tile.setAttribute('aria-haspopup', 'dialog');
+    }
     if (isMiddleCycle && cycleIndex < allTiles.length) {
       tile.setAttribute('aria-label', 'View ' + label);
       tile.addEventListener('pointerenter', () => highlightProject(button));
       tile.addEventListener('focus', () => highlightProject(button));
-      tile.addEventListener('click', turnToArtwork);
+      tile.addEventListener('click', selectArtwork);
     }
-    button.addEventListener('click', turnToArtwork);
+    button.addEventListener('click', selectArtwork);
   });
 
   const firstMiddleItem = projectList.children[middleCycle * wheelTiles.length];
