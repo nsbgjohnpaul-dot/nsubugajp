@@ -175,8 +175,8 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 .idea-cube-stage {
   --cube-size: clamp(4.5rem, min(37vw, 30.5svh), 19.25rem);
   --cube-depth: calc(var(--cube-size) / 2);
-  --cube-corner: clamp(3px, calc(var(--cube-size) / 28), 10px);
-  --cube-bevel: clamp(2px, calc(var(--cube-size) / 50), 6px);
+  --cube-corner: clamp(2px, calc(var(--cube-size) / 55), 5px);
+  --cube-seam: clamp(.5px, calc(var(--cube-size) / 250), 1px);
   position: relative;
   display: grid;
   place-items: center;
@@ -256,9 +256,12 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
     inset: 0;
     background: #242424;
     border-radius: var(--cube-corner);
-    transform: var(--slice-cap);
+    transform: var(--slice-cap) translateZ(var(--cap-gap));
     pointer-events: none;
   }
+
+  .idea-cube::after { --cap-gap: calc(var(--slice-normal) * -.25px); }
+  .idea-cube-slice::after { --cap-gap: calc(var(--slice-normal) * .25px); }
 }
 
 .page-idea .idea-cube-face .idea-tile {
@@ -281,11 +284,11 @@ body.page-idea > .idea-background-stage { position:absolute; z-index:0; left:0; 
 }
 
 .idea-cube-grid span {
-  border: 1px solid rgb(15 15 15 / .6);
-  border-radius: var(--cube-bevel);
-  box-shadow: inset 1px 1px 3px rgb(255 255 255 / .25),
-    inset -1px -1px 3px rgb(0 0 0 / .4);
+  box-shadow: inset 1px 1px 2px rgb(255 255 255 / .14);
 }
+
+.idea-cube-grid span:not(:nth-child(3n)) { border-right: var(--cube-seam) solid rgb(15 15 15 / .62); }
+.idea-cube-grid span:nth-child(-n+6) { border-bottom: var(--cube-seam) solid rgb(15 15 15 / .62); }
 
 .idea-cube-face--right .idea-cube-grid,
 .idea-cube-face--back .idea-cube-grid { background: rgb(0 0 0 / .16); }

@@ -181,6 +181,7 @@ if (ideaBoard) {
       : axis === 'y' ? 'translateY(' + seam + ') rotateX(90deg)'
       : 'translateZ(' + seam + ')';
     cube.style.setProperty('--slice-cap', cap);
+    cube.style.setProperty('--slice-normal', axis === 'y' ? -direction : direction);
     cubeSlice.replaceChildren(...strips);
     cube.setAttribute('data-twisting', '');
 
